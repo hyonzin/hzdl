@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "read_mnist.h"
-#include "dnn.h"
+#include "hzdl/dnn.h"
+#include "hzdl/read_mnist.h"
 
 
 int example_mnist(int argc, char* argv[]) {
