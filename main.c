@@ -1,14 +1,30 @@
 #include <stdio.h>
 #include "read_mnist.h"
+#include "dnn.h"
 
 
-int main(int argc, char* argv[]) {
-    unsigned char* train_images = read_train_images();
-    unsigned char* train_labels = read_train_labels();
-    unsigned char* test_images = read_test_images();
-    unsigned char* test_labels = read_test_labels();
+int example_mnist(int argc, char* argv[]) {
+    float* train_images = read_mnist_train_images();
+    float* train_labels = read_mnist_train_labels();
+    float* test_images = read_mnist_test_images();
+    float* test_labels = read_mnist_test_labels();
+    int train_size = 60000, test_size = 10000;
+    int batch_size = 128, epochs = 100;
 
-    test_mnist(train_labels, train_images, 10000);
+    //test_mnist(train_labels, train_images, 10000);
+
+    dnn* net;
+    CreateDNN(&net);
+
+    Input(net, batch_size, 1, 28, 28);
+    Dense(net, 256, None);
+    Dense(net, 10, None);
+    Softmax(net);
+    
+    Train(net, train_images, train_labels, train_size, batch_size, epochs);
+
+
+    DestroyDNN(&net);
 
     free(train_images);
     free(train_labels);
@@ -16,4 +32,8 @@ int main(int argc, char* argv[]) {
     free(test_labels);
 
     return 0;
+}
+
+int main(int argc, char* argv[]) {
+    return example_mnist(argc, argv);
 }
