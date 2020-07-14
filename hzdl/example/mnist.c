@@ -12,8 +12,8 @@ float* read_mnist_train_images(char* dir) {
     fp = fopen(path, "r");
     fseek(fp, 16, SEEK_SET);
     res = fread(cbuf, 1, 60000 * 28 * 28, fp);
-    if (res) {
-        printf("read failed(%s)\n", dir);
+    if (res <= 0) {
+        printf("read failed(%s)\n", path);
         return NULL;
     }
     fclose(fp);
@@ -36,8 +36,8 @@ float* read_mnist_train_labels(char* dir) {
     fp = fopen(path, "r");
     fseek(fp, 8, SEEK_SET);
     res = fread(cbuf, 1, 60000, fp);
-    if (res) {
-        printf("read failed(%s)\n", dir);
+    if (res <= 0) {
+        printf("read failed(%s)\n", path);
         return NULL;
     }
     fclose(fp);
@@ -60,8 +60,8 @@ float* read_mnist_test_images(char* dir) {
     fp = fopen(path, "r");
     fseek(fp, 16, SEEK_SET);
     res = fread(cbuf, 1, 10000 * 28 * 28, fp);
-    if (res) {
-        printf("read failed(%s)\n", dir);
+    if (res <= 0) {
+        printf("read failed(%s)\n", path);
         return NULL;
     }
     fclose(fp);
@@ -84,8 +84,8 @@ float* read_mnist_test_labels(char* dir) {
     fp = fopen(path, "r");
     fseek(fp, 8, SEEK_SET);
     res = fread(cbuf, 1, 10000, fp);
-    if (res) {
-        printf("read failed(%s)\n", dir);
+    if (res <= 0) {
+        printf("read failed(%s)\n", path);
         return NULL;
     }
     fclose(fp);
