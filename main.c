@@ -11,18 +11,17 @@ int example_mnist(int argc, char* argv[]) {
     int train_size = 60000, test_size = 10000;
     int batch_size = 128, epochs = 100;
 
-    //test_mnist(train_labels, train_images, 10000);
+    show_mnist(train_labels, train_images, 59999);
 
     dnn* net;
     CreateDNN(&net);
 
     Input(net, batch_size, 1, 28, 28);
-    Dense(net, 256, None);
-    Dense(net, 10, None);
+    Dense(net, 256, Sigmoid);
+    Dense(net, 10, Sigmoid);
     Softmax(net);
     
     Train(net, train_images, train_labels, train_size, batch_size, epochs);
-
 
     DestroyDNN(&net);
 

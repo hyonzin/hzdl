@@ -130,6 +130,7 @@ void ForwardDense(layer* p) {
             }
             sum += p->bias[o];
 
+            // Activation
             if (p->activation != NULL) {
                 sum = p->activation(sum);
             }
@@ -154,7 +155,7 @@ void ForwardSoftmax(layer* p) {
         for (i=0; i<dim; ++i) {
             sum += exp(in[i]);
         }
-
+        
         // Calculate ratio
         for (i=0; i<dim; ++i) {
             out[i] = exp(in[i]) / sum;

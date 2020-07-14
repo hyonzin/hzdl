@@ -36,6 +36,11 @@ typedef struct _dnn {
     struct _layer* edge;
 } dnn;
 
+
+#include "util.h"
+#include "activation.h"
+
+
 void CreateDNN(dnn** net);
 void DestroyDNN(dnn** net);
 void Input(dnn* net, int n, int c, int h, int w);
@@ -54,7 +59,4 @@ void ForwardDense(layer* p);
 void ForwardSoftmax(layer* p);
 
 void Backward(dnn* net, int batch_size, float* labels);
-
-#include "util.h"
-#include "activation.h"
 

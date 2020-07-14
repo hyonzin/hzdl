@@ -65,13 +65,13 @@ float* read_mnist_test_labels() {
     return buf;
 }
 
-void test_mnist(float* label, float* image, int idx) {
+void show_mnist(float* label, float* image, int idx) {
     int i, j;
     printf("label: %.0f\n", label[idx]);
 
     for (i=0; i<28; ++i) {
         for (j=0; j<28; ++j) {
-            if (image[(28*28*idx) + i*28+j] > 255/2) printf("#");
+            if (image[(28*28*idx) + i*28+j] > 0.5) printf("#");
             else printf(" ");
         }
         printf("\n");
