@@ -69,5 +69,6 @@ void DenseForward(layer* p) {
 }
 
 void DenseBackward(layer* p) {
+    ;
 }
 

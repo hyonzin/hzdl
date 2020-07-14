@@ -1,37 +1,45 @@
 CC := gcc
-CFLAGS := -O3 -lm
+CFLAGS := -O3 -lm -fPIC
 
 SRC := hzdl/
-OBJ := build/
-BIN := test.out
+BUILD := build/
+LIB := $(BUILD)/libhzdl.so
+TEST := test.out
 
 SOURCES := $(wildcard $(SRC)/*.c) \
 		   $(wildcard $(SRC)/layer/*.c) \
-		   $(wildcard $(SRC)/example/*.c) \
-		   $(wildcard ./*.c)
-OBJECTS := $(addprefix $(OBJ)/, $(patsubst %.c, %.o, $(notdir $(SOURCES))))
+		   $(wildcard $(SRC)/example/*.c)
+OBJECTS := $(addprefix $(BUILD)/, $(patsubst %.c, %.o, $(notdir $(SOURCES))))
 
 
-all: dir $(BIN)
+test: dir $(TEST)
+
+lib: dir $(LIB)
+
+all: dir $(TEST) $(LIB)
 	
-$(BIN): $(OBJECTS)
+$(LIB): $(BUILDECTS)
+	$(CC) $^ -o $@ $(CFLAGS) --shared
+
+$(BUILD)/%.o: $(SRC)/%.c
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+$(BUILD)/%.o: $(SRC)/layer/%.c
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+$(BUILD)/%.o: $(SRC)/example/%.c
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+$(BUILD)/main.o: ./main.c
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+$(TEST): $(BUILD)/main.o $(OBJECTS)
 	$(CC) $^ -o $@ $(CFLAGS)
 
-$(OBJ)/%.o: ./%.c
-	$(CC) -c $< -o $@ $(CFLAGS)
-
-$(OBJ)/%.o: $(SRC)/%.c
-	$(CC) -c $< -o $@ $(CFLAGS)
-
-$(OBJ)/%.o: $(SRC)/layer/%.c
-	$(CC) -c $< -o $@ $(CFLAGS)
-
-$(OBJ)/%.o: $(SRC)/example/%.c
-	$(CC) -c $< -o $@ $(CFLAGS)
 
 dir:
-	mkdir -p $(OBJ)/
+	mkdir -p $(BUILD)/
 
 clean:
-	rm -fr $(BIN) $(OBJ)
+	rm -fr $(TEST) $(BUILD)
 

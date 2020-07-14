@@ -67,7 +67,7 @@ void Forward(dnn* net, int batch_size) {
     }
 }
 
-void Backward(dnn* net, int batch_size, float* labels) {
+void Backward(dnn* net, int batch_size, float learning_rate, float* labels) {
     layer* p = net->edge;
     if (p == NULL) return;
 
@@ -79,8 +79,7 @@ void Backward(dnn* net, int batch_size, float* labels) {
 }
 
 void Train(dnn* net, float* train_images, float* train_labels,
-        int train_size, int batch_size, int epochs) {
-    int b_size;
+        int train_size, int batch_size, int epochs, float learning_rate) {
     int rest_train_size = train_size;
     float* labels = malloc(net->edge->n * net->edge->c
             * net->edge->h * net->edge->w * sizeof(float));
@@ -90,31 +89,31 @@ void Train(dnn* net, float* train_images, float* train_labels,
         if (p == NULL) break;
         p = p->next;
 
-        // Set batch size
-        b_size = (batch_size < rest_train_size)? batch_size : rest_train_size;
-        rest_train_size -= b_size;
-
         // Feed input data
-        memcpy(p->in, train_images, b_size * 28 * 28);
+        memcpy(p->in, train_images, batch_size * 28 * 28);
 
         // Set label
-        memcpy(labels, train_labels, b_size);
+        memcpy(labels, train_labels, batch_size);
 
         // Forward up to the last layer
-        Forward(net, b_size);
-        
+        Forward(net, batch_size);
+
+
         // Backward
-        Backward(net, b_size, labels);
+        Backward(net, batch_size, learning_rate, labels);
 
         // Add offset for the next batch
-        train_images = train_images + b_size * 28 * 28;
-        train_labels = train_labels + b_size;
+        train_images = train_images + batch_size * 28 * 28;
+        train_labels = train_labels + batch_size;
 
         /////(Debug) just 1 iteration
-        for (b_size = 0; b_size < 10; ++b_size) {
-            printf("%.4f\n", net->edge->out[b_size]);
+        {
+            int i;
+            for (i = 0; i < 10; ++i) {
+                printf("%.4f\n", net->edge->out[i]);
+            }
+            printf("\n");
         }
-        printf("\n");
         break;
     }
 

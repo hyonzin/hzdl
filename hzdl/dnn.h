@@ -53,12 +53,9 @@ float Sigmoid(float val);
 void Softmax(dnn* net);
 
 void Train(dnn* net, float* train_images, float* train_labels,
-        int train_size, int batch_size, int epochs);
+        int train_size, int batch_size, int epochs, float learning_rate);
 
 
 void Forward(dnn* net, int batch_size);
-void ForwardDense(layer* p);
-void ForwardSoftmax(layer* p);
-
-void Backward(dnn* net, int batch_size, float* labels);
+void Backward(dnn* net, int batch_size, float learning_rate, float* labels);
 

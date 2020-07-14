@@ -53,5 +53,24 @@ void SoftmaxForward(layer* p) {
 }
 
 void SoftmaxBackward(layer* p) {
+    int n, dim, d;
+    float sum;
+    float *in, *out;
+
+    dim = p->c * p->h * p->w;
+
+    for (n=0; n<p->n; ++n) {
+        in = &p->out[n*dim];
+        out = &p->in[n*dim];
+        
+        sum = 0;
+        for (d=0; d<dim; ++d) {
+            sum += in[d];
+        }
+        
+        for (d=0; d<dim; ++d) {
+            out[d] = (in[d] * (sum - in[d])) / (sum * sum);
+        }
+    }
 }
 
