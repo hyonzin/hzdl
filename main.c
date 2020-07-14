@@ -1,13 +1,15 @@
 #include <stdio.h>
 #include "hzdl/dnn.h"
-#include "hzdl/read_mnist.h"
+#include "hzdl/example/mnist.h"
 
+#define MNIST_DIR "dataset/mnist"
 
 int example_mnist(int argc, char* argv[]) {
-    float* train_images = read_mnist_train_images();
-    float* train_labels = read_mnist_train_labels();
-    float* test_images = read_mnist_test_images();
-    float* test_labels = read_mnist_test_labels();
+    float* train_images = read_mnist_train_images(MNIST_DIR);
+    float* train_labels = read_mnist_train_labels(MNIST_DIR);
+    float* test_images = read_mnist_test_images(MNIST_DIR);
+    float* test_labels = read_mnist_test_labels(MNIST_DIR);
+
     int train_size = 60000, test_size = 10000;
     int batch_size = 128, epochs = 100;
 

@@ -1,11 +1,34 @@
+CC := gcc
+CFLAGS=-O3 -lm
 
-SOURCES=hzdl/read_mnist.c hzdl/dnn.c hzdl/activation.c hzdl/util.c
+SRC := hzdl/
+OBJ := build/
+BIN := bin/
 
-all: test.out
+SOURCES := $(wildcard $(SRC)/*.c) $(wildcard $(SRC)/layer/*.c) $(wildcard $(SRC)/example/*.c) $(wildcard ./*.c)  
+OBJECTS := $(patsubst %.c, $(OBJ)/%.o, $(SOURCES))
 
-test.out: main.c $(SOURCES)
-	gcc -o $@ $+ -lm
+
+all: dir $(BIN)/test.out
+	
+$(BIN)/test.out: $(OBJECTS)
+	$(CC) $^ -o $@ $(CFLAGS)
+
+$(OBJ)/%.o: ./%.c
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+$(OBJ)/%.o: $(SRC)/%.c
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+$(OBJ)/layer/%.o: $(SRC)/layer/%.c
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+$(OBJ)/example/%.o: $(SRC)/example/%.c
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+dir:
+	mkdir -p $(BIN) $(OBJ)/hzdl/layer $(OBJ)/hzdl/example
 
 clean:
-	rm -f test.out
+	rm -fr $(BIN) $(OBJ)
 

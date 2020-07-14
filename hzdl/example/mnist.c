@@ -1,13 +1,21 @@
-#include "read_mnist.h"
+#include "mnist.h"
 
 
-float* read_mnist_train_images() {
-    int i;
+float* read_mnist_train_images(char* dir) {
+    int i, res;
     float* buf = (float*) malloc(60000 * 28 * 28 * sizeof(float));
     unsigned char* cbuf = (unsigned char*) malloc(60000 * 28 * 28);
-    FILE* fp = fopen("dataset/mnist/train-images-idx3-ubyte", "r");
+    char path[256];
+    FILE* fp;
+    
+    sprintf(path, "%s/train-images-idx3-ubyte", dir);
+    fp = fopen(path, "r");
     fseek(fp, 16, SEEK_SET);
-    fread(cbuf, 1, 60000 * 28 * 28, fp);
+    res = fread(cbuf, 1, 60000 * 28 * 28, fp);
+    if (res) {
+        printf("read failed(%s)\n", dir);
+        return NULL;
+    }
     fclose(fp);
 
     for (i=0; i<60000 * 28 * 28; ++i) {
@@ -17,13 +25,21 @@ float* read_mnist_train_images() {
     return buf;
 }
 
-float* read_mnist_train_labels() {
-    int i;
+float* read_mnist_train_labels(char* dir) {
+    int i, res;
     float* buf = (float*) malloc(60000 * sizeof(float));
     unsigned char* cbuf = (unsigned char*) malloc(60000);
-    FILE* fp = fopen("dataset/mnist/train-labels-idx1-ubyte", "r");
+    char path[256];
+    FILE* fp;
+    
+    sprintf(path, "%s/train-labels-idx1-ubyte", dir);
+    fp = fopen(path, "r");
     fseek(fp, 8, SEEK_SET);
-    fread(cbuf, 1, 60000, fp);
+    res = fread(cbuf, 1, 60000, fp);
+    if (res) {
+        printf("read failed(%s)\n", dir);
+        return NULL;
+    }
     fclose(fp);
 
     for (i=0; i<60000; ++i) {
@@ -33,13 +49,21 @@ float* read_mnist_train_labels() {
     return buf;
 }
 
-float* read_mnist_test_images() {
-    int i;
+float* read_mnist_test_images(char* dir) {
+    int i, res;
     float* buf = (float*) malloc(10000 * 28 * 28 * sizeof(float));
     unsigned char* cbuf = (unsigned char*) malloc(10000 * 28 * 28);
-    FILE* fp = fopen("dataset/mnist/t10k-images-idx3-ubyte", "r");
+    char path[256];
+    FILE* fp;
+    
+    sprintf(path, "%s/t10k-images-idx3-ubyte", dir);
+    fp = fopen(path, "r");
     fseek(fp, 16, SEEK_SET);
-    fread(cbuf, 1, 10000 * 28 * 28, fp);
+    res = fread(cbuf, 1, 10000 * 28 * 28, fp);
+    if (res) {
+        printf("read failed(%s)\n", dir);
+        return NULL;
+    }
     fclose(fp);
 
     for (i=0; i<10000*28*28; ++i) {
@@ -49,13 +73,21 @@ float* read_mnist_test_images() {
     return buf;
 }
 
-float* read_mnist_test_labels() {
-    int i;
+float* read_mnist_test_labels(char* dir) {
+    int i, res;
     float* buf = (float*) malloc(10000 * sizeof(float));
     unsigned char* cbuf = (unsigned char*) malloc(10000);
-    FILE* fp = fopen("dataset/mnist/t10k-labels-idx1-ubyte", "r");
+    char path[256];
+    FILE* fp;
+    
+    sprintf(path, "%s/t10k-labels-idx1-ubyte", dir);
+    fp = fopen(path, "r");
     fseek(fp, 8, SEEK_SET);
-    fread(cbuf, 1, 10000, fp);
+    res = fread(cbuf, 1, 10000, fp);
+    if (res) {
+        printf("read failed(%s)\n", dir);
+        return NULL;
+    }
     fclose(fp);
 
     for (i=0; i<10000; ++i) {
