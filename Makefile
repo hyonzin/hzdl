@@ -3,15 +3,15 @@ CFLAGS=-O3 -lm
 
 SRC := hzdl/
 OBJ := build/
-BIN := bin/
+BIN := test.out
 
 SOURCES := $(wildcard $(SRC)/*.c) $(wildcard $(SRC)/layer/*.c) $(wildcard $(SRC)/example/*.c) $(wildcard ./*.c)  
 OBJECTS := $(patsubst %.c, $(OBJ)/%.o, $(SOURCES))
 
 
-all: dir $(BIN)/test.out
+all: dir $(BIN)
 	
-$(BIN)/test.out: $(OBJECTS)
+$(BIN): $(OBJECTS)
 	$(CC) $^ -o $@ $(CFLAGS)
 
 $(OBJ)/%.o: ./%.c
@@ -27,7 +27,7 @@ $(OBJ)/example/%.o: $(SRC)/example/%.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 dir:
-	mkdir -p $(BIN) $(OBJ)/hzdl/layer $(OBJ)/hzdl/example
+	mkdir -p $(OBJ)/hzdl/layer $(OBJ)/hzdl/example
 
 clean:
 	rm -fr $(BIN) $(OBJ)
