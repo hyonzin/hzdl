@@ -11,6 +11,11 @@ void Softmax(dnn* net) {
     l->h = 1;
     l->w = dim;
     l->type = layer_type_softmax;
+   
+    l->activation = NULL;
+    l->forward = SoftmaxForward;
+    l->backward = SoftmaxBackward;
+    
     l->in = net->edge->out;
     l->weight = NULL;
     l->bias = NULL;
@@ -24,7 +29,7 @@ void Softmax(dnn* net) {
     net->edge = l;
 }
 
-void ForwardSoftmax(layer* p) {
+void SoftmaxForward(layer* p) {
     int n, i;
     int dim = p->c * p->h * p->w;
     
@@ -45,5 +50,8 @@ void ForwardSoftmax(layer* p) {
             out[i] = exp(in[i]) / sum;
         }
     }
+}
+
+void SoftmaxBackward(layer* p) {
 }
 

@@ -19,6 +19,8 @@ typedef struct _layer {
     int h;
     int w;
     enum layer_type type;
+    void (*forward)(struct _layer*);
+    void (*backward)(struct _layer*);
     float (*activation)(float);
 
     float* in;

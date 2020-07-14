@@ -42,6 +42,9 @@ void Input(dnn* net, int n, int c, int h, int w) {
     l->h = h;
     l->w = w;
     l->type = layer_type_input;
+    l->activation = NULL;
+    l->forward = NULL;
+    l->backward = NULL;
     l->in = NULL;
     l->weight = NULL;
     l->bias = NULL;
@@ -58,22 +61,21 @@ void Forward(dnn* net, int batch_size) {
     p = p->next;
 
     while (p) {
-        switch (p->type) {
-        case layer_type_dense:
-            ForwardDense(p);
-            break;
-        case layer_type_softmax:
-            ForwardSoftmax(p);
-            break;
-        }
-
+        if (p->forward != NULL)
+            p->forward(p);
         p = p->next;
     }
 }
 
 void Backward(dnn* net, int batch_size, float* labels) {
     layer* p = net->edge;
+    if (p == NULL) return;
 
+    while (p && p->type != layer_type_input) {
+        if (p->backward != NULL)
+            p->backward(p);
+        p = p->prev;
+    }
 }
 
 void Train(dnn* net, float* train_images, float* train_labels,

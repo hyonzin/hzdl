@@ -3,6 +3,6 @@
 #include "../dnn.h"
 
 void Softmax(dnn* net);
-
-void ForwardSoftmax(layer* p);
+void SoftmaxForward(layer* p);
+void SoftmaxBackward(layer* p);
 

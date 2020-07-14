@@ -8,9 +8,12 @@ void Dense(dnn* net, int dim, float (*activation)(float)) {
     l->h = 1;
     l->w = dim;
     l->type = layer_type_dense;
-    l->in = net->edge->out;
+  
     l->activation = activation;
-
+    l->forward = DenseForward;
+    l->backward = DenseBackward;
+   
+    l->in = net->edge->out;
     // Malloc for weight and output
     l->weight = (float*) malloc(
             (l->n * (net->edge->c * net->edge->h * net->edge->w) * dim)
@@ -36,7 +39,7 @@ void Dense(dnn* net, int dim, float (*activation)(float)) {
     net->edge = l;
 }
 
-void ForwardDense(layer* p) {
+void DenseForward(layer* p) {
     int n, i, o;
     int in_dim = p->prev->c * p->prev->h * p->prev->w;
     int out_dim = p->c * p->h * p->w;
@@ -63,5 +66,8 @@ void ForwardDense(layer* p) {
             out[o] = sum;
         }
     }
+}
+
+void DenseBackward(layer* p) {
 }
 
