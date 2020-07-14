@@ -1,12 +1,15 @@
 CC := gcc
-CFLAGS=-O3 -lm
+CFLAGS := -O3 -lm
 
 SRC := hzdl/
 OBJ := build/
 BIN := test.out
 
-SOURCES := $(wildcard $(SRC)/*.c) $(wildcard $(SRC)/layer/*.c) $(wildcard $(SRC)/example/*.c) $(wildcard ./*.c)  
-OBJECTS := $(patsubst %.c, $(OBJ)/%.o, $(SOURCES))
+SOURCES := $(wildcard $(SRC)/*.c) \
+		   $(wildcard $(SRC)/layer/*.c) \
+		   $(wildcard $(SRC)/example/*.c) \
+		   $(wildcard ./*.c)
+OBJECTS := $(addprefix $(OBJ)/, $(patsubst %.c, %.o, $(notdir $(SOURCES))))
 
 
 all: dir $(BIN)
@@ -20,14 +23,14 @@ $(OBJ)/%.o: ./%.c
 $(OBJ)/%.o: $(SRC)/%.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
-$(OBJ)/layer/%.o: $(SRC)/layer/%.c
+$(OBJ)/%.o: $(SRC)/layer/%.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
-$(OBJ)/example/%.o: $(SRC)/example/%.c
+$(OBJ)/%.o: $(SRC)/example/%.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 dir:
-	mkdir -p $(OBJ)/hzdl/layer $(OBJ)/hzdl/example
+	mkdir -p $(OBJ)/
 
 clean:
 	rm -fr $(BIN) $(OBJ)
