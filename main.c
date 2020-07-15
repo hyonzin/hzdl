@@ -12,7 +12,7 @@ int example_mnist(int argc, char* argv[]) {
 
     int train_size = 60000, test_size = 10000;
     int batch_size = 256, epochs = 1000;
-    float learning_rate = 0.03;
+    float learning_rate = 0.01;
 
     //show_mnist(train_labels, train_images, 59999);
 
@@ -20,7 +20,7 @@ int example_mnist(int argc, char* argv[]) {
     CreateDNN(&net);
 
     Input(net, batch_size, 1, 28, 28);
-    Dense(net, 128, None);
+    Dense(net, 256, Sigmoid);
     Dense(net, 10, Softmax);
     
     Train(net, train_images, train_labels, train_size,

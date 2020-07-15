@@ -111,6 +111,7 @@ void show_mnist(float* label, float* image, int idx) {
     printf("\n");
 }
 
+//FIXME
 void feed_mnist_images(float* dst, unsigned char* src, int offset, int num) {
     int i, j, k;
     int m = 0;
@@ -126,6 +127,7 @@ void feed_mnist_images(float* dst, unsigned char* src, int offset, int num) {
     }
 }
 
+//FIXME
 void feed_mnist_labels(float* dst, unsigned char* src, int offset, int num) {
     int i, j;
     int m = 0, n = 0;

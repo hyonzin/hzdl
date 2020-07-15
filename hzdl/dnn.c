@@ -103,16 +103,23 @@ void Train(dnn* net,
             // Add offset for the next batch
             offset += batch_size;
         }
-
         _time_end();
 
         {
-            printf("epoch %d: %.0f ms (%.1f img/sec)\n",
+            printf("..............%.0f => ", labels[0]);
+            for(int i=0; i<10; ++i) {
+                printf("%.4f ", net->edge->out[i]);
+            }
+            printf("\n");
+        }
+
+        {
+            printf("epoch %d: %.0f ms (%.0f img/sec)\n",
                     epoch_cnt, _get_time(),
                     (float)offset / _get_time() * 1000);
 
             if (test_images != NULL && test_labels != NULL && test_size > 0) {
-                int i, dim = _get_num_element(net->edge);
+                int dim = _get_num_element(net->edge);
                 int correct = 0;
                 offset = 0;
                 while (offset + batch_size <= test_size) {
@@ -126,12 +133,10 @@ void Train(dnn* net,
                     Forward(net);
 
                     // Calculate accuracy
-                    #pragma omp parallel for
-                    for (i=0; i < batch_size; ++i) {
-                        int j;
+                    for (int i=0; i < batch_size; ++i) {
                         int max_idx = -1;
                         int max_val = -1;
-                        for (j=0; j < dim; ++j) {
+                        for (int j=0; j < dim; ++j) {
                             float val = net->edge->out[i*dim + j];
 //                            printf("%.2f, ", val);
                             if (val > max_val) {
