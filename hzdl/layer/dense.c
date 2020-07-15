@@ -11,6 +11,7 @@ void Dense(dnn* net, int dim, activation act) {
   
     l->forward = DenseForward;
     l->backward = DenseBackward;
+    l->update_weight = DenseUpdateWeight;
     l->destroy = DenseDestroy;
 
     l->act.forward = act.forward;
@@ -44,43 +45,120 @@ void Dense(dnn* net, int dim, activation act) {
     net->edge = l;
 }
 
-void DenseForward(layer* p) {
+void DenseForward(layer* l) {
     int n, i, o;
-    int in_dim = p->prev->c * p->prev->h * p->prev->w;
-    int out_dim = p->c * p->h * p->w;
+    int in_dim = l->prev->c * l->prev->h * l->prev->w;
+    int out_dim = _get_num_element(l);
 
-    for (n=0; n<p->n; ++n) {
+    #pragma omp parallel for
+    for (n=0; n < l->n; ++n) {
         float *in, *out;
-        in = &p->in[n * in_dim];
-        out = &p->out[n * out_dim];
+        in = &l->in[n * in_dim];
+        out = &l->out[n * out_dim];
 
-        for (o=0; o<p->c * p->h * p->w; ++o) {
+        for (o=0; o < out_dim; ++o) {
             float sum = 0;
 
             // Dot product
-            for (i=0; i<in_dim; ++i) {
-                sum += in[i] * p->weight[o * in_dim + i];
+            for (i=0; i < in_dim; ++i) {
+                sum += in[i] * l->weight[o * in_dim + i];
             }
-            sum += p->bias[o];
+            //FIXME bias?
+            //sum += l->bias[o];
 
-            // Activation
-            if (p->act.forward != NULL) {
-                sum = p->act.forward(sum);
+            out[o] = sum; 
+        }
+    }
+
+    // Activation function
+    if (l->act.forward != NULL) {
+        for (n=0; n < l->n; ++n) {
+            float *out = &l->out[n * out_dim];
+            for (o=0; o < out_dim; ++o) {
+                out[o] = l->act.forward(l, n, out[o]);
             }
-
-            out[o] = sum;
         }
     }
 }
 
-void DenseBackward(layer* p) {
-    ;
+void DenseBackward(layer* l, float* labels) {
+    int is_last_dense_layer = 0;
+    int n, d, dim;
+    
+    if (l->next == NULL) {
+        is_last_dense_layer = 1;
+    }
+
+    dim = _get_num_element(l);
+    
+    #pragma omp parallel for
+    for (n=0; n < l->n; ++n) {
+        if (l->act.backward) {
+            for (d=0; d < dim; ++d) {
+                l->delta[n*dim + d] =
+                        l->act.backward(l, n, l->out[n*dim + d]);
+            }
+        } else {
+            for (d=0; d < dim; ++d) {
+                l->delta[n*dim + d] = 1;
+            }
+        }
+    }
+    
+    if (is_last_dense_layer) {
+        #pragma omp parallel for
+        for (n=0; n < l->n; ++n) {
+            for (d=0; d < dim; ++d) {
+                float label = 0;
+                if (labels[n] == d) label = 1;
+
+                l->delta[n*dim + d] *=
+                    (l->out[n*dim + d] - label);
+            }
+        }
+    } else {
+        int next_dim = _get_num_element(l->next);
+        #pragma omp parallel for
+        for (n=0; n < l->n; ++n) {
+            for (d=0; d < dim; ++d) {
+                int k;
+                float sum = 0;
+
+                for (k=0; k < next_dim; ++k) {
+                    sum += l->next->delta[n*next_dim + k]
+                        * l->next->weight[k*dim + d];
+                }
+                l->delta[n*dim + d] *= sum;
+            }
+        }
+    }
 }
 
-void DenseDestroy(layer* p) {
-    _safe_free(&p->weight);
-    _safe_free(&p->bias);
-    _safe_free(&p->out);
-    _safe_free(&p->delta); //FIXME no need if it's not training
+void DenseUpdateWeight(layer* l, float eta) {
+    layer* p = l->prev;
+
+    int dim = _get_num_element(l);
+    int prev_dim = _get_num_element(p);
+
+    int i, j, n;
+    #pragma omp parallel for
+    for (j=0; j <dim; ++j) {
+        for (i=0; i < prev_dim; ++i) {
+            float dw = 0;
+            for (n=0; n < l->n; ++n) {
+                dw += p->out[n*prev_dim + i] * l->delta[n*dim + j];
+            }
+            dw = -eta * (dw / n);
+
+            l->weight[j * prev_dim + i] += dw;
+        }
+    }
+}
+
+void DenseDestroy(layer* l) {
+    _safe_free(&l->weight);
+    _safe_free(&l->bias);
+    _safe_free(&l->out);
+    _safe_free(&l->delta); //FIXME no need if it's not training
 }
 

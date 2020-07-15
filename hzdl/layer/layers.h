@@ -1,15 +1,12 @@
 #pragma once
 
+#include "activation.h"
+
 enum layer_type {
     layer_type_input,
     layer_type_dense,
     layer_type_softmax
 };
-
-typedef struct _activation {
-    float (*forward)(float);
-    float (*backward)(float);
-} activation;
 
 typedef struct _layer {
     int n;
@@ -18,7 +15,8 @@ typedef struct _layer {
     int w;
     enum layer_type type;
     void (*forward)(struct _layer*);
-    void (*backward)(struct _layer*);
+    void (*backward)(struct _layer*, float* labels);
+    void (*update_weight)(struct _layer*, float eta);
     void (*destroy)(struct _layer*);
     struct _activation act;
 
@@ -35,5 +33,4 @@ typedef struct _layer {
 
 #include "input.h"
 #include "dense.h"
-#include "softmax.h"
 

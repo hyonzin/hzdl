@@ -1,10 +1,10 @@
 CC := gcc
-CFLAGS := -O3 -lm -fPIC
+CFLAGS := -O3 -lm -fPIC -fopenmp
 
 SRC := hzdl/
 BUILD := build/
 LIB := $(BUILD)/libhzdl.so
-TEST := test.out
+TEST := test_mnist.out
 
 SOURCES := $(wildcard $(SRC)/*.c) \
 		   $(wildcard $(SRC)/layer/*.c) \

@@ -1,10 +1,28 @@
 #pragma once
 
-#include "layer/layers.h"
+#include <stdlib.h>
+#include <time.h>
+#include <sys/time.h>
 
-int _get_num_element(layer* p);
+
+#define getMillisecond(start, end) \
+        (end.tv_sec-start.tv_sec)*1000 + \
+    (end.tv_usec-start.tv_usec)/1000.0
+
+#define _get_num_element(p) (p->c * p->h * p->w)
+
+struct _layer;
+struct timeval _tv_start, _tv_end;
+
+
+void _time_start();
+
+void _time_end();
+
+float _get_time();
 
 void _safe_free(float** ptr);
 
 float _random_float();
+
 

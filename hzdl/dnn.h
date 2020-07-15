@@ -6,6 +6,7 @@
 #include <math.h>
 #include <time.h>
 #include <assert.h>
+#include <omp.h>
 
 
 typedef struct _dnn {
@@ -15,15 +16,17 @@ typedef struct _dnn {
 
 
 #include "util.h"
-#include "activation.h"
 #include "layer/layers.h"
 
 void CreateDNN(dnn** net);
 void DestroyDNN(dnn** net);
 
-void Train(dnn* net, float* train_images, float* train_labels,
-        int train_size, int batch_size, int epochs, float learning_rate);
+void Train(dnn* net,
+        float* train_images, float* train_labels, int train_size,
+        float* test_images, float* test_labels, int test_size,
+        int epochs, float learning_rate);
 
-void Forward(dnn* net, int batch_size);
-void Backward(dnn* net, int batch_size, float learning_rate, float* labels);
+void Forward(dnn* net);
+void Backward(dnn* net, float* labels);
+void UpdateWeight(dnn* net, float learning_rate);
 

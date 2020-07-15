@@ -11,6 +11,7 @@ void Input(dnn* net, int n, int c, int h, int w) {
 
     l->forward = NULL;
     l->backward = NULL;
+    l->update_weight = NULL;
     l->destroy = InputDestroy;
 
     l->in = NULL;
@@ -24,7 +25,7 @@ void Input(dnn* net, int n, int c, int h, int w) {
     net->edge = net->next = l;
 }
 
-void InputDestroy(layer* p) {
-    _safe_free(&p->out);
+void InputDestroy(layer* l) {
+    _safe_free(&l->out);
 }
 
