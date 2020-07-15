@@ -12,16 +12,15 @@ void Softmax(dnn* net) {
     l->w = dim;
     l->type = layer_type_softmax;
    
-    l->activation = NULL;
     l->forward = SoftmaxForward;
     l->backward = SoftmaxBackward;
+    l->destroy = SoftmaxDestroy;
     
     l->in = net->edge->out;
     l->weight = NULL;
     l->bias = NULL;
-    
-    // Malloc for output
     l->out = (float*) malloc((l->n * dim) * sizeof(float));
+    l->delta = (float*) malloc((l->n * dim) * sizeof(float));
 
     l->next = NULL;
     l->prev = net->edge;
@@ -74,3 +73,7 @@ void SoftmaxBackward(layer* p) {
     }
 }
 
+void SoftmaxDestroy(layer* p) {
+    _safe_free(&p->out);
+    _safe_free(&p->delta);
+}
