@@ -1,0 +1,90 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BUILD	Makefile	/^BUILD := build\/$/;"	m
+Backward	hzdl/dnn.c	/^void Backward(dnn* net, float* labels) {$/;"	f
+CC	Makefile	/^CC := gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS := -O3 -lm -fPIC -fopenmp$/;"	m
+CreateDNN	hzdl/dnn.c	/^void CreateDNN(dnn** net) {$/;"	f
+Dense	hzdl/layer/dense.c	/^void Dense(dnn* net, int dim, activation act) {$/;"	f
+DenseBackward	hzdl/layer/dense.c	/^void DenseBackward(layer* l, float* labels) {$/;"	f
+DenseDestroy	hzdl/layer/dense.c	/^void DenseDestroy(layer* l) {$/;"	f
+DenseForward	hzdl/layer/dense.c	/^void DenseForward(layer* l) {$/;"	f
+DenseUpdateWeight	hzdl/layer/dense.c	/^void DenseUpdateWeight(layer* l, float eta) {$/;"	f
+DestroyDNN	hzdl/dnn.c	/^void DestroyDNN(dnn** net) {$/;"	f
+Forward	hzdl/dnn.c	/^void Forward(dnn* net) {$/;"	f
+Input	hzdl/layer/input.c	/^void Input(dnn* net, int n, int c, int h, int w) {$/;"	f
+InputDestroy	hzdl/layer/input.c	/^void InputDestroy(layer* l) {$/;"	f
+LIB	Makefile	/^LIB := $(BUILD)\/libhzdl.so$/;"	m
+MNIST_DIR	main.c	5;"	d	file:
+None	hzdl/layer/activation.h	/^static activation None = { NoneForward, NoneBackward};$/;"	v
+NoneBackward	hzdl/layer/activation.c	/^float NoneBackward(struct _layer* l, int batch_idx, float val) {$/;"	f
+NoneForward	hzdl/layer/activation.c	/^float NoneForward(struct _layer* l, int batch_idx, float val) {$/;"	f
+OBJECTS	Makefile	/^OBJECTS := $(addprefix $(BUILD)\/, $(patsubst %.c, %.o, $(notdir $(SOURCES))))$/;"	m
+ReLU	hzdl/layer/activation.h	/^static activation ReLU = { ReLUForward, ReLUBackward};$/;"	v
+ReLUBackward	hzdl/layer/activation.c	/^float ReLUBackward(struct _layer* l, int batch_idx, float val) {$/;"	f
+ReLUForward	hzdl/layer/activation.c	/^float ReLUForward(struct _layer* l, int batch_idx, float val) {$/;"	f
+SOURCES	Makefile	/^SOURCES := $(wildcard $(SRC)\/*.c) \\$/;"	m
+SRC	Makefile	/^SRC := hzdl\/$/;"	m
+Sigmoid	hzdl/layer/activation.h	/^static activation Sigmoid = { SigmoidForward, SigmoidBackward};$/;"	v
+SigmoidBackward	hzdl/layer/activation.c	/^float SigmoidBackward(struct _layer* l, int batch_idx, float val) {$/;"	f
+SigmoidForward	hzdl/layer/activation.c	/^float SigmoidForward(struct _layer* l, int batch_idx, float val) {$/;"	f
+Softmax	hzdl/layer/activation.h	/^static activation Softmax = { SoftmaxForward, SoftmaxBackward};$/;"	v
+SoftmaxBackward	hzdl/layer/activation.c	/^float SoftmaxBackward(struct _layer* l, int batch_idx, float val) {$/;"	f
+SoftmaxForward	hzdl/layer/activation.c	/^float SoftmaxForward(struct _layer* l, int batch_idx, float val) {$/;"	f
+TEST	Makefile	/^TEST := test_mnist.out$/;"	m
+Train	hzdl/dnn.c	/^void Train(dnn* net,$/;"	f
+UpdateWeight	hzdl/dnn.c	/^void UpdateWeight(dnn* net, float learning_rate) {$/;"	f
+_activation	hzdl/layer/activation.h	/^typedef struct _activation {$/;"	s
+_dnn	hzdl/dnn.h	/^typedef struct _dnn {$/;"	s
+_get_num_element	hzdl/util.h	12;"	d
+_get_time	hzdl/util.c	/^float _get_time() {$/;"	f
+_layer	hzdl/layer/layers.h	/^typedef struct _layer {$/;"	s
+_random_float	hzdl/util.c	/^float _random_float() {$/;"	f
+_safe_free	hzdl/util.c	/^void _safe_free(float** ptr) {$/;"	f
+_time_end	hzdl/util.c	/^void _time_end() {$/;"	f
+_time_start	hzdl/util.c	/^void _time_start() {$/;"	f
+_tv_end	hzdl/util.h	/^struct timeval _tv_start, _tv_end;$/;"	v	typeref:struct:
+_tv_start	hzdl/util.h	/^struct timeval _tv_start, _tv_end;$/;"	v	typeref:struct:timeval
+act	hzdl/layer/layers.h	/^    struct _activation act;$/;"	m	struct:_layer	typeref:struct:_layer::_activation
+activation	hzdl/layer/activation.h	/^} activation;$/;"	t	typeref:struct:_activation
+backward	hzdl/layer/activation.h	/^    float (*backward)(struct _layer*, int, float);$/;"	m	struct:_activation
+backward	hzdl/layer/layers.h	/^    void (*backward)(struct _layer*, float* labels);$/;"	m	struct:_layer
+bias	hzdl/layer/layers.h	/^    float* bias;$/;"	m	struct:_layer
+c	hzdl/layer/layers.h	/^    int c;$/;"	m	struct:_layer
+delta	hzdl/layer/layers.h	/^    float* delta;$/;"	m	struct:_layer
+destroy	hzdl/layer/layers.h	/^    void (*destroy)(struct _layer*);$/;"	m	struct:_layer
+dnn	hzdl/dnn.h	/^} dnn;$/;"	t	typeref:struct:_dnn
+dnn	hzdl/layer/layers.h	/^    struct _dnn* dnn;$/;"	m	struct:_layer	typeref:struct:_layer::_dnn
+edge	hzdl/dnn.h	/^    struct _layer* edge;$/;"	m	struct:_dnn	typeref:struct:_dnn::_layer
+example_mnist	main.c	/^int example_mnist(int argc, char* argv[]) {$/;"	f
+feed_mnist_images	hzdl/example/mnist.c	/^void feed_mnist_images(float* dst, unsigned char* src, int offset, int num) {$/;"	f
+feed_mnist_labels	hzdl/example/mnist.c	/^void feed_mnist_labels(float* dst, unsigned char* src, int offset, int num) {$/;"	f
+forward	hzdl/layer/activation.h	/^    float (*forward)(struct _layer*, int, float);$/;"	m	struct:_activation
+forward	hzdl/layer/layers.h	/^    void (*forward)(struct _layer*);$/;"	m	struct:_layer
+getMillisecond	hzdl/util.h	8;"	d
+h	hzdl/layer/layers.h	/^    int h;$/;"	m	struct:_layer
+in	hzdl/layer/layers.h	/^    float* in;$/;"	m	struct:_layer
+layer	hzdl/layer/layers.h	/^} layer;$/;"	t	typeref:struct:_layer
+layer_type	hzdl/layer/layers.h	/^enum layer_type {$/;"	g
+layer_type_dense	hzdl/layer/layers.h	/^    layer_type_dense,$/;"	e	enum:layer_type
+layer_type_input	hzdl/layer/layers.h	/^    layer_type_input,$/;"	e	enum:layer_type
+layer_type_softmax	hzdl/layer/layers.h	/^    layer_type_softmax$/;"	e	enum:layer_type
+main	main.c	/^int main(int argc, char* argv[]) {$/;"	f
+n	hzdl/layer/layers.h	/^    int n;$/;"	m	struct:_layer
+next	hzdl/dnn.h	/^    struct _layer* next;$/;"	m	struct:_dnn	typeref:struct:_dnn::_layer
+next	hzdl/layer/layers.h	/^    struct _layer* next;$/;"	m	struct:_layer	typeref:struct:_layer::_layer
+out	hzdl/layer/layers.h	/^    float* out;$/;"	m	struct:_layer
+prev	hzdl/layer/layers.h	/^    struct _layer* prev;$/;"	m	struct:_layer	typeref:struct:_layer::_layer
+read_mnist_test_images	hzdl/example/mnist.c	/^float* read_mnist_test_images(char* dir) {$/;"	f
+read_mnist_test_labels	hzdl/example/mnist.c	/^float* read_mnist_test_labels(char* dir) {$/;"	f
+read_mnist_train_images	hzdl/example/mnist.c	/^float* read_mnist_train_images(char* dir) {$/;"	f
+read_mnist_train_labels	hzdl/example/mnist.c	/^float* read_mnist_train_labels(char* dir) {$/;"	f
+show_mnist	hzdl/example/mnist.c	/^void show_mnist(float* label, float* image, int idx) {$/;"	f
+type	hzdl/layer/layers.h	/^    enum layer_type type;$/;"	m	struct:_layer	typeref:enum:_layer::layer_type
+update_weight	hzdl/layer/layers.h	/^    void (*update_weight)(struct _layer*, float eta);$/;"	m	struct:_layer
+w	hzdl/layer/layers.h	/^    int w;$/;"	m	struct:_layer
+weight	hzdl/layer/layers.h	/^    float* weight;$/;"	m	struct:_layer

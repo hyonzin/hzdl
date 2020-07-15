@@ -106,14 +106,6 @@ void Train(dnn* net,
         _time_end();
 
         {
-            printf("..............%.0f => ", labels[0]);
-            for(int i=0; i<10; ++i) {
-                printf("%.4f ", net->edge->out[i]);
-            }
-            printf("\n");
-        }
-
-        {
             printf("epoch %d: %.0f ms (%.0f img/sec)\n",
                     epoch_cnt, _get_time(),
                     (float)offset / _get_time() * 1000);
@@ -126,7 +118,7 @@ void Train(dnn* net,
                     layer* l = net->next;
 
                     // Feed input data
-                    memcpy(l->out, train_images + offset * _get_num_element(l),
+                    memcpy(l->out, test_images + offset * _get_num_element(l),
                             batch_size * _get_num_element(l));
                 
                     // Forward up to the last layer
@@ -144,8 +136,8 @@ void Train(dnn* net,
                                 max_val = val;
                             }
                         }
-//                        printf("%d vs %f\n", max_idx, train_labels[offset + i]);
-                        if (max_idx == train_labels[offset + i]) {
+//                        printf("%d vs %f\n", max_idx, test_labels[offset + i]);
+                        if (max_idx == test_labels[offset + i]) {
                             correct++;
                         }
                     }
@@ -153,7 +145,7 @@ void Train(dnn* net,
                     // Add offset for the next batch
                     offset += batch_size;
                 }
-                printf("  ====> Acc.: %.2f\n", ((float)correct/offset) * 100);
+                printf(" ====> Acc.: %.2f\n", ((float)correct/offset) * 100);
             }
         }
     }
