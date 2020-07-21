@@ -64,7 +64,7 @@ void DenseForward(layer* l) {
 
             //FIXME bias?
             //sum += l->bias[o];
-            out[o] = sum; 
+            out[o] = sum;
         }
     }
 

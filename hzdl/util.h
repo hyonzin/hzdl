@@ -11,9 +11,6 @@
 
 #define _get_num_element(p) (p->c * p->h * p->w)
 
-struct _layer;
-struct timeval _tv_start, _tv_end;
-
 
 void _time_start();
 
