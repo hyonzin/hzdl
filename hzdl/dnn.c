@@ -70,13 +70,15 @@ void Train(dnn* net,
     int offset;
     int epoch_cnt;
     int batch_size;
+    int in_dim, out_dim;
     
     assert(net != NULL && net->next != NULL);
 
     batch_size = net->next->n;
-    labels = malloc(batch_size * net->edge->c
-            * net->edge->h * net->edge->w * sizeof(float));
+    in_dim = _get_num_element(net->next);
+    out_dim = _get_num_element(net->edge);
 
+    labels = malloc(batch_size * out_dim * sizeof(float));
     epoch_cnt = 0;
     while (epoch_cnt++ < epochs) {
         _time_start();
@@ -87,11 +89,10 @@ void Train(dnn* net,
             if (l == NULL) break;
 
             // Feed input data
-            memcpy(l->out, train_images + offset * _get_num_element(l),
-                    batch_size * _get_num_element(l));
+            memcpy(l->out, train_images + offset * in_dim, batch_size * in_dim);
 
             // Set label
-            memcpy(labels, train_labels + offset, batch_size);
+            memcpy(labels, train_labels + offset * out_dim, batch_size * out_dim);
 
             // Forward up to the last layer
             Forward(net);
@@ -111,32 +112,44 @@ void Train(dnn* net,
                     (float)offset / _get_time() * 1000);
 
             if (test_images != NULL && test_labels != NULL && test_size > 0) {
-                int dim = _get_num_element(net->edge);
                 int correct = 0;
                 offset = 0;
                 while (offset + batch_size <= test_size) {
                     layer* l = net->next;
 
                     // Feed input data
-                    memcpy(l->out, test_images + offset * _get_num_element(l),
-                            batch_size * _get_num_element(l));
+                    memcpy(l->out, test_images + offset * in_dim, batch_size * in_dim);
                 
                     // Forward up to the last layer
                     Forward(net);
 
                     // Calculate accuracy
                     for (int i=0; i < batch_size; ++i) {
+                        int label_idx = -1;
+                        float label_val = -1;
                         int max_idx = -1;
-                        int max_val = -1;
-                        for (int j=0; j < dim; ++j) {
-                            float val = net->edge->out[i*dim + j];
-//                            printf("%.2f, ", val);
+                        float max_val = -1;
+                        for (int j=0; j < out_dim; ++j) {
+                            float val = net->edge->out[i*out_dim + j];
                             if (val > max_val) {
                                 max_idx = j;
                                 max_val = val;
                             }
                         }
 //                        printf("%d vs %f\n", max_idx, test_labels[offset + i]);
+
+                        if (i==0) {
+                        printf("calc: ");
+                        for (int j=0; j < out_dim; ++j) {
+                            printf("%.2f ", net->edge->out[i*out_dim + j]);
+                        }
+                        printf("\nlabl: ");
+                        for (int j=0; j < out_dim; ++j) {
+                            printf("%.2f ", test_labels[(offset+i)*out_dim + j]);
+                        }
+                        printf("\n");
+                        }
+
                         if (max_idx == test_labels[offset + i]) {
                             correct++;
                         }

@@ -26,8 +26,8 @@ float* read_mnist_train_images(char* dir) {
 }
 
 float* read_mnist_train_labels(char* dir) {
-    int i, res;
-    float* buf = (float*) malloc(60000 * sizeof(float));
+    int i, j, res;
+    float* buf = (float*) malloc(60000 * 10 * sizeof(float));
     unsigned char* cbuf = (unsigned char*) malloc(60000);
     char path[256];
     FILE* fp;
@@ -43,7 +43,12 @@ float* read_mnist_train_labels(char* dir) {
     fclose(fp);
 
     for (i=0; i<60000; ++i) {
-        buf[i] = (float)cbuf[i];
+        for (j=0; j<10; ++j) {
+            if (j == cbuf[i])
+                buf[i*10 + j] = 1;
+            else
+                buf[i*10 + j] = 0;
+        }
     }
 
     return buf;
@@ -74,8 +79,8 @@ float* read_mnist_test_images(char* dir) {
 }
 
 float* read_mnist_test_labels(char* dir) {
-    int i, res;
-    float* buf = (float*) malloc(10000 * sizeof(float));
+    int i, j, res;
+    float* buf = (float*) malloc(10000 * 10 * sizeof(float));
     unsigned char* cbuf = (unsigned char*) malloc(10000);
     char path[256];
     FILE* fp;
@@ -91,7 +96,12 @@ float* read_mnist_test_labels(char* dir) {
     fclose(fp);
 
     for (i=0; i<10000; ++i) {
-        buf[i] = (float)cbuf[i];
+        for (j=0; j<10; ++j) {
+            if (j == cbuf[i])
+                buf[i*10 + j] = 1;
+            else
+                buf[i*10 + j] = 0;
+        }
     }
 
     return buf;
@@ -99,7 +109,13 @@ float* read_mnist_test_labels(char* dir) {
 
 void show_mnist(float* label, float* image, int idx) {
     int i, j;
-    printf("label: %.0f\n", label[idx]);
+    printf("label: ");
+    for (i=0; i<10; ++i) {
+        if (label[idx*10 + i] > 0) {
+            printf("%d\n", i);
+            break;
+        }
+    }
 
     for (i=0; i<28; ++i) {
         for (j=0; j<28; ++j) {

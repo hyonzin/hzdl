@@ -20,8 +20,7 @@ void Dense(dnn* net, int dim, activation act) {
     l->in = net->edge->out;
     // Malloc for weight and output
     l->weight = (float*) malloc(
-            (l->n * (net->edge->c * net->edge->h * net->edge->w) * dim)
-            * sizeof(float));
+        (l->n * _get_num_element(net->edge) * dim) * sizeof(float));
     l->bias = (float*) malloc((l->n * dim) * sizeof(float));
     l->out = (float*) malloc((l->n * dim) * sizeof(float));
     
@@ -31,7 +30,7 @@ void Dense(dnn* net, int dim, activation act) {
     {
         int i;
         srand(time(NULL));
-        for (i=0; i<l->n * (net->edge->c * net->edge->h * net->edge->w) * dim; ++i) {
+        for (i=0; i<l->n * _get_num_element(net->edge) * dim; ++i) {
             l->weight[i] = _random_float();
         }
         for (i=0; i<l->n * dim; ++i) {
@@ -62,9 +61,9 @@ void DenseForward(layer* l) {
             for (int i=0; i < in_dim; ++i) {
                 sum += in[i] * l->weight[o * in_dim + i];
             }
+
             //FIXME bias?
             //sum += l->bias[o];
-
             out[o] = sum; 
         }
     }
@@ -108,11 +107,8 @@ void DenseBackward(layer* l, float* labels) {
         #pragma omp parallel for
         for (int n=0; n < l->n; ++n) {
             for (int d=0; d < dim; ++d) {
-                float label = 0;
-                if (labels[n] == d) label = 1;
-
                 l->delta[n*dim + d] *=
-                    (l->out[n*dim + d] - label);
+                    (l->out[n*dim + d] - labels[n*dim + d]);
             }
         }
     } else {
