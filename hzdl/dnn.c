@@ -110,6 +110,7 @@ void Train(dnn* net,
                 epoch_cnt, _get_time(),
                 (float)offset / _get_time() * 1000);
 
+        // Test if test data is given
         if (test_images != NULL && test_labels != NULL && test_size > 0) {
             Test(net, test_images, test_labels, test_size);
         }
