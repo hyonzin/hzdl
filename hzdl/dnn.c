@@ -125,8 +125,7 @@ void Train(dnn* net,
 
                     // Calculate accuracy
                     for (int i=0; i < batch_size; ++i) {
-                        int label_idx = -1;
-                        float label_val = -1;
+                        int label = -1;
                         int max_idx = -1;
                         float max_val = -1;
                         for (int j=0; j < out_dim; ++j) {
@@ -135,22 +134,12 @@ void Train(dnn* net,
                                 max_idx = j;
                                 max_val = val;
                             }
-                        }
-//                        printf("%d vs %f\n", max_idx, test_labels[offset + i]);
-
-                        if (i==0) {
-                        printf("calc: ");
-                        for (int j=0; j < out_dim; ++j) {
-                            printf("%.2f ", net->edge->out[i*out_dim + j]);
-                        }
-                        printf("\nlabl: ");
-                        for (int j=0; j < out_dim; ++j) {
-                            printf("%.2f ", test_labels[(offset+i)*out_dim + j]);
-                        }
-                        printf("\n");
+                            if (test_labels[(offset+i)*out_dim + j] == 1) {
+                                label = j;
+                            }
                         }
 
-                        if (max_idx == test_labels[offset + i]) {
+                        if (max_idx == label) {
                             correct++;
                         }
                     }

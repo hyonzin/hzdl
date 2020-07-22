@@ -4,6 +4,7 @@
 
 #define MNIST_DIR "dataset/mnist"
 
+
 int example_mnist(int argc, char* argv[]) {
     float* train_images = read_mnist_train_images(MNIST_DIR);
     float* train_labels = read_mnist_train_labels(MNIST_DIR);
@@ -11,8 +12,8 @@ int example_mnist(int argc, char* argv[]) {
     float* test_labels = read_mnist_test_labels(MNIST_DIR);
 
     int train_size = 60000, test_size = 10000;
-    int batch_size = 256, epochs = 100;
-    float learning_rate = 0.1;
+    int batch_size = 128, epochs = 100;
+    float learning_rate = 0.003;
 
     //show_mnist(train_labels, train_images, 59999);
 
@@ -20,9 +21,9 @@ int example_mnist(int argc, char* argv[]) {
     CreateDNN(&net);
 
     Input(net, batch_size, 1, 28, 28);
-    Dense(net, 256, Sigmoid);
+    Dense(net, 256, ReLU);
     Dense(net, 10, Softmax);
-    
+   
     Train(net, train_images, train_labels, train_size,
             test_images, test_labels, test_size,
             epochs, learning_rate);
@@ -40,3 +41,4 @@ int example_mnist(int argc, char* argv[]) {
 int main(int argc, char* argv[]) {
     return example_mnist(argc, argv);
 }
+

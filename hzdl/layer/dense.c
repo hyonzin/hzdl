@@ -24,7 +24,7 @@ void Dense(dnn* net, int dim, activation act) {
     l->bias = (float*) malloc((l->n * dim) * sizeof(float));
     l->out = (float*) malloc((l->n * dim) * sizeof(float));
     
-    l->delta = (float*) malloc((l->n * dim) * sizeof(float)); //FIXME no need if it's not training
+    l->delta = (float*) malloc((l->n * dim) * sizeof(float));
 
     // Set random values
     {
@@ -45,7 +45,7 @@ void Dense(dnn* net, int dim, activation act) {
 }
 
 void DenseForward(layer* l) {
-    int in_dim = l->prev->c * l->prev->h * l->prev->w;
+    int in_dim = _get_num_element(l->prev);
     int out_dim = _get_num_element(l);
 
     #pragma omp parallel for
@@ -70,7 +70,9 @@ void DenseForward(layer* l) {
 
     // Activation function
     if (l->act.forward != NULL) {
+        #pragma omp parallel for
         for (int n=0; n < l->n; ++n) {
+            l->delta[n] = -1;
             float *out = &l->out[n * out_dim];
             for (int o=0; o < out_dim; ++o) {
                 out[o] = l->act.forward(l, n, out[o]);
@@ -153,6 +155,6 @@ void DenseDestroy(layer* l) {
     _safe_free(&l->weight);
     _safe_free(&l->bias);
     _safe_free(&l->out);
-    _safe_free(&l->delta); //FIXME no need if it's not training
+    _safe_free(&l->delta);
 }
 
