@@ -106,52 +106,63 @@ void Train(dnn* net,
         }
         _time_end();
 
-        {
-            printf("epoch %d: %.0f ms (%.0f img/sec)\n",
-                    epoch_cnt, _get_time(),
-                    (float)offset / _get_time() * 1000);
+        printf("epoch %d: %.0f ms (%.0f img/sec)\n",
+                epoch_cnt, _get_time(),
+                (float)offset / _get_time() * 1000);
 
-            if (test_images != NULL && test_labels != NULL && test_size > 0) {
-                int correct = 0;
-                offset = 0;
-                while (offset + batch_size <= test_size) {
-                    layer* l = net->next;
-
-                    // Feed input data
-                    memcpy(l->out, test_images + offset * in_dim, batch_size * in_dim);
-                
-                    // Forward up to the last layer
-                    Forward(net);
-
-                    // Calculate accuracy
-                    for (int i=0; i < batch_size; ++i) {
-                        int label = -1;
-                        int max_idx = -1;
-                        float max_val = -1;
-                        for (int j=0; j < out_dim; ++j) {
-                            float val = net->edge->out[i*out_dim + j];
-                            if (val > max_val) {
-                                max_idx = j;
-                                max_val = val;
-                            }
-                            if (test_labels[(offset+i)*out_dim + j] == 1) {
-                                label = j;
-                            }
-                        }
-
-                        if (max_idx == label) {
-                            correct++;
-                        }
-                    }
-            
-                    // Add offset for the next batch
-                    offset += batch_size;
-                }
-                printf(" ====> Acc.: %.2f\n", ((float)correct/offset) * 100);
-            }
+        if (test_images != NULL && test_labels != NULL && test_size > 0) {
+            Test(net, test_images, test_labels, test_size);
         }
     }
 
     free(labels);
+}
+
+void Test(dnn* net, float* test_images, float* test_labels, int test_size) {
+    int correct = 0;
+    int offset = 0;
+    int batch_size;
+    int in_dim, out_dim;
+    
+    assert(net != NULL && net->next != NULL);
+
+    batch_size = net->next->n;
+    in_dim = _get_num_element(net->next);
+    out_dim = _get_num_element(net->edge);
+
+    while (offset + batch_size <= test_size) {
+        layer* l = net->next;
+
+        // Feed input data
+        memcpy(l->out, test_images + offset * in_dim, batch_size * in_dim);
+    
+        // Forward up to the last layer
+        Forward(net);
+
+        // Calculate accuracy
+        for (int i=0; i < batch_size; ++i) {
+            int label = -1;
+            int max_idx = -1;
+            float max_val = -1;
+            for (int j=0; j < out_dim; ++j) {
+                float val = net->edge->out[i*out_dim + j];
+                if (val > max_val) {
+                    max_idx = j;
+                    max_val = val;
+                }
+                if (test_labels[(offset+i)*out_dim + j] == 1) {
+                    label = j;
+                }
+            }
+
+            if (max_idx == label) {
+                correct++;
+            }
+        }
+
+        // Add offset for the next batch
+        offset += batch_size;
+    }
+    printf(" ====> Acc.: %.2f\n", ((float)correct/offset) * 100);
 }
 

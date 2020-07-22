@@ -12,8 +12,8 @@ int example_mnist(int argc, char* argv[]) {
     float* test_labels = read_mnist_test_labels(MNIST_DIR);
 
     int train_size = 60000, test_size = 10000;
-    int batch_size = 128, epochs = 100;
-    float learning_rate = 0.003;
+    int batch_size = 128, epochs = 1000;
+    float learning_rate = 0.03;
 
     //show_mnist(train_labels, train_images, 59999);
 

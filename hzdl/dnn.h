@@ -26,6 +26,9 @@ void Train(dnn* net,
         float* test_images, float* test_labels, int test_size,
         int epochs, float learning_rate);
 
+void Test(dnn* net,
+        float* test_images, float* test_labels, int test_size);
+
 void Forward(dnn* net);
 void Backward(dnn* net, float* labels);
 void UpdateWeight(dnn* net, float learning_rate);
