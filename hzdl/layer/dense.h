@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../dnn.h"
-#include "../util.h"
+#include "hzdl/dnn.h"
+#include "hzdl/util.h"
 
 void Dense(dnn* net, int dim, activation act);
 void DenseForward(layer* p);

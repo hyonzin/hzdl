@@ -15,8 +15,8 @@ typedef struct _dnn {
 } dnn;
 
 
-#include "util.h"
-#include "layer/layers.h"
+#include "hzdl/util.h"
+#include "hzdl/layer/layers.h"
 
 void CreateDNN(dnn** net);
 void DestroyDNN(dnn** net);

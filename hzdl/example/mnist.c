@@ -1,4 +1,4 @@
-#include "mnist.h"
+#include "hzdl/example/mnist.h"
 
 
 float* read_mnist_train_images(char* dir) {

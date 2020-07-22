@@ -1,6 +1,6 @@
 #pragma once
 
-#include "activation.h"
+#include "hzdl/layer/activation.h"
 
 enum layer_type {
     layer_type_input,

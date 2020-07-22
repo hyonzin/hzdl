@@ -1,4 +1,4 @@
-#include "dense.h"
+#include "hzdl/layer/dense.h"
 
 void Dense(dnn* net, int dim, activation act) {
     layer* l = (layer*) malloc(sizeof(layer));

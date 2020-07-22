@@ -1,4 +1,4 @@
-#include "input.h"
+#include "hzdl/layer/input.h"
 
 void Input(dnn* net, int n, int c, int h, int w) {
     layer* l = (layer*) malloc(sizeof(layer));

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../dnn.h"
-#include "../util.h"
+#include "hzdl/dnn.h"
+#include "hzdl/util.h"
 
 void Input(dnn* net, int n, int c, int h, int w);
 void InputDestroy(layer* p);

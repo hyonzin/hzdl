@@ -1,10 +1,9 @@
 CC := gcc
-CFLAGS := -O3 -lm -fPIC -fopenmp
+CFLAGS := -I. -O3 -lm -fPIC -fopenmp
 
 SRC := hzdl/
 BUILD := build/
 LIB := $(BUILD)/libhzdl.so
-TEST := test_mnist.out
 
 SOURCES := $(wildcard $(SRC)/*.c) \
 		   $(wildcard $(SRC)/layer/*.c) \
@@ -12,14 +11,11 @@ SOURCES := $(wildcard $(SRC)/*.c) \
 OBJECTS := $(addprefix $(BUILD)/, $(patsubst %.c, %.o, $(notdir $(SOURCES))))
 
 
-test: dir $(TEST)
+all: dir $(BUILD)/test_mnist.out
 
-lib: dir $(LIB)
+$(BUILD)/test_mnist.out: $(SRC)/test/test_mnist.c $(OBJECTS)
+	$(CC) $^ -o $@ $(CFLAGS)
 
-all: dir $(TEST) $(LIB)
-	
-$(LIB): $(BUILDECTS)
-	$(CC) $^ -o $@ $(CFLAGS) --shared
 
 $(BUILD)/%.o: $(SRC)/%.c
 	$(CC) -c $< -o $@ $(CFLAGS)
@@ -30,16 +26,9 @@ $(BUILD)/%.o: $(SRC)/layer/%.c
 $(BUILD)/%.o: $(SRC)/example/%.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
-$(BUILD)/main.o: ./main.c
-	$(CC) -c $< -o $@ $(CFLAGS)
-
-$(TEST): $(BUILD)/main.o $(OBJECTS)
-	$(CC) $^ -o $@ $(CFLAGS)
-
-
 dir:
 	mkdir -p $(BUILD)/
 
 clean:
-	rm -fr $(TEST) $(BUILD)
+	rm -fr $(BUILD)
 
