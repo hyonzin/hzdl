@@ -89,10 +89,10 @@ void Train(dnn* net,
             if (l == NULL) break;
 
             // Feed input data
-            memcpy(l->out, train_images + offset * in_dim, batch_size * in_dim);
+            memcpy(l->out, train_images + offset * in_dim, batch_size * in_dim * sizeof(float));
 
             // Set label
-            memcpy(labels, train_labels + offset * out_dim, batch_size * out_dim);
+            memcpy(labels, train_labels + offset * out_dim, batch_size * out_dim * sizeof(float));
 
             // Forward
             Forward(net);
@@ -135,7 +135,7 @@ void Test(dnn* net, float* test_images, float* test_labels, int test_size) {
         layer* l = net->next;
 
         // Feed input data
-        memcpy(l->out, test_images + offset * in_dim, batch_size * in_dim);
+        memcpy(l->out, test_images + offset * in_dim, batch_size * in_dim * sizeof(float));
     
         // Forward
         Forward(net);

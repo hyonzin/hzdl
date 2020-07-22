@@ -86,7 +86,7 @@ void DenseBackward(layer* l, float* labels) {
     int dim;
     
     if (l->next == NULL) {
-        is_last_dense_layer = 1;
+        is_las  t_dense_layer = 1;
     }
 
     dim = _get_num_element(l);
@@ -115,6 +115,7 @@ void DenseBackward(layer* l, float* labels) {
         }
     } else {
         int next_dim = _get_num_element(l->next);
+
         #pragma omp parallel for
         for (int n=0; n < l->n; ++n) {
             for (int d=0; d < dim; ++d) {
@@ -145,6 +146,7 @@ void DenseUpdateWeight(layer* l, float eta) {
                 dw += p->out[n*prev_dim + i] * l->delta[n*dim + j];
             }
             dw = -eta * dw;
+//            dw = -eta * dw / l->n;
 
             l->weight[j * prev_dim + i] += dw;
         }

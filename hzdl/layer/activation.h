@@ -26,4 +26,4 @@ float SoftmaxForward(struct _layer* l, int batch_idx, float val);
 float SoftmaxBackward(struct _layer* l, int batch_idx, float val);
 static activation Softmax = { SoftmaxForward, SoftmaxBackward};
 
-#include "layers.h"
+#include "hzdl/layer/layers.h"

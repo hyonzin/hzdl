@@ -4,8 +4,7 @@
 
 enum layer_type {
     layer_type_input,
-    layer_type_dense,
-    layer_type_softmax
+    layer_type_dense
 };
 
 typedef struct _layer {
@@ -14,6 +13,7 @@ typedef struct _layer {
     int h;
     int w;
     enum layer_type type;
+
     void (*forward)(struct _layer*);
     void (*backward)(struct _layer*, float* labels);
     void (*update_weight)(struct _layer*, float eta);

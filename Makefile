@@ -1,5 +1,5 @@
 CC := gcc
-CFLAGS := -I. -O3 -lm -fPIC -fopenmp
+CFLAGS := -I$(shell pwd) -O3 -lm -fPIC -fopenmp
 
 SRC := hzdl
 BUILD := build
@@ -13,14 +13,21 @@ OBJECTS := $(addprefix $(BUILD)/, $(patsubst %.c, %.o, $(notdir $(SOURCES))))
 TEST_SOURCES := $(wildcard $(SRC)/test/*.c)
 TEST_BINARIES := $(addprefix $(BUILD)/, $(patsubst %.c, %.out, $(notdir $(TEST_SOURCES))))
 
-all: dir tests
+default: tests
+
+all: tests lib
+
+tests: dir $(TEST_BINARIES)
+
+lib: dir $(LIB)
 
 dir: $(BUILD)
 
-tests: $(TEST_BINARIES)
-
 $(BUILD)/%.out: $(SRC)/test/%.c $(OBJECTS)
 	$(CC) $^ -o $@ $(CFLAGS)
+
+$(LIB): $(OBJECTS)
+	$(CC) $^ --shared -o $@ $(CFLAGS)
 
 $(BUILD)/%.o: $(SRC)/%.c
 	$(CC) -c $< -o $@ $(CFLAGS)

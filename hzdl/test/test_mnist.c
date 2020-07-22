@@ -12,8 +12,8 @@ int test_mnist(int argc, char* argv[]) {
     float* test_labels = read_mnist_test_labels(MNIST_DIR);
 
     int train_size = 60000, test_size = 10000;
-    int batch_size = 128, epochs = 1000;
-    float learning_rate = 0.03;
+    int batch_size = 32, epochs = 50;
+    float learning_rate = 0.00001;
 
     //show_mnist(train_labels, train_images, 59999);
 
@@ -21,7 +21,7 @@ int test_mnist(int argc, char* argv[]) {
     CreateDNN(&net);
 
     Input(net, batch_size, 1, 28, 28);
-    Dense(net, 200, ReLU);
+    Dense(net, 500, ReLU);
     Dense(net, 10, Softmax);
    
     Train(net, train_images, train_labels, train_size,
