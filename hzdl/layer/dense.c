@@ -144,7 +144,7 @@ void DenseUpdateWeight(layer* l, float eta) {
             for (int n=0; n < l->n; ++n) {
                 dw += p->out[n*prev_dim + i] * l->delta[n*dim + j];
             }
-            dw = -eta * (dw / l->n);
+            dw = -eta * dw;
 
             l->weight[j * prev_dim + i] += dw;
         }

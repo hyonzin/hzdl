@@ -21,7 +21,7 @@ int example_mnist(int argc, char* argv[]) {
     CreateDNN(&net);
 
     Input(net, batch_size, 1, 28, 28);
-    Dense(net, 256, ReLU);
+    Dense(net, 200, ReLU);
     Dense(net, 10, Softmax);
    
     Train(net, train_images, train_labels, train_size,

@@ -94,10 +94,10 @@ void Train(dnn* net,
             // Set label
             memcpy(labels, train_labels + offset * out_dim, batch_size * out_dim);
 
-            // Forward up to the last layer
+            // Forward
             Forward(net);
 
-            // Backward
+            // Backward and update weight
             Backward(net, labels);
             UpdateWeight(net, learning_rate);
 
@@ -137,7 +137,7 @@ void Test(dnn* net, float* test_images, float* test_labels, int test_size) {
         // Feed input data
         memcpy(l->out, test_images + offset * in_dim, batch_size * in_dim);
     
-        // Forward up to the last layer
+        // Forward
         Forward(net);
 
         // Calculate accuracy
