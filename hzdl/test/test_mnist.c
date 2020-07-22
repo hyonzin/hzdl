@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include "hzdl/dnn.h"
-#include "hzdl/example/mnist.h"
+#include "hzdl/dataset/mnist.h"
 
-#define MNIST_DIR "dataset/mnist"
+#define MNIST_DIR "data/mnist"
 
 
-int example_mnist(int argc, char* argv[]) {
+int test_mnist(int argc, char* argv[]) {
     float* train_images = read_mnist_train_images(MNIST_DIR);
     float* train_labels = read_mnist_train_labels(MNIST_DIR);
     float* test_images = read_mnist_test_images(MNIST_DIR);
@@ -39,6 +39,6 @@ int example_mnist(int argc, char* argv[]) {
 }
 
 int main(int argc, char* argv[]) {
-    return example_mnist(argc, argv);
+    return test_mnist(argc, argv);
 }
 

@@ -7,7 +7,7 @@ LIB := $(BUILD)/libhzdl.so
 
 SOURCES := $(wildcard $(SRC)/*.c) \
 		   $(wildcard $(SRC)/layer/*.c) \
-		   $(wildcard $(SRC)/example/*.c)
+		   $(wildcard $(SRC)/dataset/*.c)
 OBJECTS := $(addprefix $(BUILD)/, $(patsubst %.c, %.o, $(notdir $(SOURCES))))
 
 
@@ -23,7 +23,7 @@ $(BUILD)/%.o: $(SRC)/%.c
 $(BUILD)/%.o: $(SRC)/layer/%.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
-$(BUILD)/%.o: $(SRC)/example/%.c
+$(BUILD)/%.o: $(SRC)/dataset/%.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 dir:
