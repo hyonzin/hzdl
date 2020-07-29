@@ -62,27 +62,29 @@ void UpdateWeight(dnn* net, float learning_rate) {
     }
 }
 
+
 void Train(dnn* net,
         float* train_images, float* train_labels, int train_size,
         float* test_images, float* test_labels, int test_size,
-        int epochs, float learning_rate) {
+        int epochs, float learning_rate, float (*score_function)(struct _dnn*, float*)) {
     float* labels;
     int epoch_cnt;
     int batch_size;
     int in_dim, out_dim;
     
-    assert(net != NULL && net->next != NULL);
+    assert(net != NULL);
+    assert(net->next != NULL);
 
     batch_size = net->next->n;
     in_dim = _get_num_element(net->next);
     out_dim = _get_num_element(net->edge);
 
-    labels = malloc(batch_size * out_dim * sizeof(float));
+//    labels = malloc(batch_size * out_dim * sizeof(float));
     epoch_cnt = 0;
     while (epoch_cnt++ < epochs) {
         _time_start();
 
-        int correct = 0;
+        float score = 0;
         int offset = 0;
 
         while (offset + batch_size <= train_size) {
@@ -93,7 +95,8 @@ void Train(dnn* net,
             memcpy(l->out, train_images + offset * in_dim, batch_size * in_dim * sizeof(float));
 
             // Set label
-            memcpy(labels, train_labels + offset * out_dim, batch_size * out_dim * sizeof(float));
+//            memcpy(labels, train_labels + offset * out_dim, batch_size * out_dim * sizeof(float));
+            labels = train_labels + offset * out_dim;
 
             // Forward
             Forward(net);
@@ -105,25 +108,9 @@ void Train(dnn* net,
             // Add offset for the next batch
             offset += batch_size;
 
-            // Calculate accuracy
-            for (int i=0; i < batch_size; ++i) {
-                int label = -1;
-                int max_idx = -1;
-                float max_val = -1;
-                for (int j=0; j < out_dim; ++j) {
-                    float val = net->edge->out[i*out_dim + j];
-                    if (val > max_val) {
-                        max_idx = j;
-                        max_val = val;
-                    }
-                    if (labels[i*out_dim + j] == 1) {
-                        label = j;
-                    }
-                }
-
-                if (max_idx == label) {
-                    correct++;
-                }
+            // Calculate score
+            if (score_function != NULL) {
+                score += score_function(net, labels);
             }
         }
         _time_end();
@@ -132,24 +119,29 @@ void Train(dnn* net,
                 epoch_cnt, _get_time(),
                 (float)offset / _get_time() * 1000);
 
-        printf(" ====> Train Acc.: %.2f\n", ((float)correct/offset) * 100);
+        if (score_function != NULL) {
+            printf(" ====> Train Acc. or Loss: %.2f\n", (score/offset));
+        }
 
         // Test if test data is given
-        if (test_images != NULL && test_labels != NULL && test_size > 0) {
-            Test(net, test_images, test_labels, test_size);
+        if (score_function != NULL && test_images != NULL && test_labels != NULL && test_size > 0) {
+            Test(net, test_images, test_labels, test_size, score_function);
         }
     }
 
-    free(labels);
+//    free(labels);
 }
 
-void Test(dnn* net, float* test_images, float* test_labels, int test_size) {
-    int correct = 0;
+void Test(dnn* net, float* test_images, float* test_labels, int test_size, float (*score_function)(struct _dnn*, float*)) {
+    float score = 0;
     int offset = 0;
     int batch_size;
     int in_dim, out_dim;
+    float* labels;
     
-    assert(net != NULL && net->next != NULL);
+    assert(net != NULL);
+    assert(net->next != NULL);
+    assert(score_function != NULL);
 
     batch_size = net->next->n;
     in_dim = _get_num_element(net->next);
@@ -160,34 +152,20 @@ void Test(dnn* net, float* test_images, float* test_labels, int test_size) {
 
         // Feed input data
         memcpy(l->out, test_images + offset * in_dim, batch_size * in_dim * sizeof(float));
+        
+        // Set label
+        labels = test_labels + offset * out_dim;
     
         // Forward
         Forward(net);
 
-        // Calculate accuracy
-        for (int i=0; i < batch_size; ++i) {
-            int label = -1;
-            int max_idx = -1;
-            float max_val = -1;
-            for (int j=0; j < out_dim; ++j) {
-                float val = net->edge->out[i*out_dim + j];
-                if (val > max_val) {
-                    max_idx = j;
-                    max_val = val;
-                }
-                if (test_labels[(offset+i)*out_dim + j] == 1) {
-                    label = j;
-                }
-            }
-
-            if (max_idx == label) {
-                correct++;
-            }
-        }
+        // Calculate score
+        score += score_function(net, labels);
 
         // Add offset for the next batch
         offset += batch_size;
     }
-    printf(" ====> Test Acc.: %.2f\n", ((float)correct/offset) * 100);
+
+    printf(" ====> Test Acc. or loss: %.2f\n", ((float)score/offset));
 }
 

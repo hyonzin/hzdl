@@ -26,7 +26,8 @@ int test_mnist(int argc, char* argv[]) {
    
     Train(net, train_images, train_labels, train_size,
             test_images, test_labels, test_size,
-            epochs, learning_rate);
+            epochs, learning_rate,
+            Loss);
 
     DestroyDNN(&net);
 
