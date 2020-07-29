@@ -27,5 +27,6 @@ void Input(dnn* net, int n, int c, int h, int w) {
 
 void InputDestroy(layer* l) {
     _safe_free(&l->out);
+    if (l!=NULL) free(l);
 }
 

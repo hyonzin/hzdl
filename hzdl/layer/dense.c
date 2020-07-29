@@ -86,7 +86,7 @@ void DenseBackward(layer* l, float* labels) {
     int dim;
     
     if (l->next == NULL) {
-        is_las  t_dense_layer = 1;
+        is_last_dense_layer = 1;
     }
 
     dim = _get_num_element(l);
@@ -145,8 +145,8 @@ void DenseUpdateWeight(layer* l, float eta) {
             for (int n=0; n < l->n; ++n) {
                 dw += p->out[n*prev_dim + i] * l->delta[n*dim + j];
             }
-            dw = -eta * dw;
-//            dw = -eta * dw / l->n;
+//            dw = -eta * dw;
+            dw = -eta * dw / l->n;
 
             l->weight[j * prev_dim + i] += dw;
         }
@@ -158,5 +158,6 @@ void DenseDestroy(layer* l) {
     _safe_free(&l->bias);
     _safe_free(&l->out);
     _safe_free(&l->delta);
+    if (l!=NULL) free(l);
 }
 

@@ -1,5 +1,6 @@
 #include "hzdl/dnn.h"
 
+
 void CreateDNN(dnn** net) {
     if (net == NULL) return;
 
@@ -18,7 +19,6 @@ void DestroyDNN(dnn** net) {
             prev = l;
             l = l->next;
             prev->destroy(prev);
-            free(prev);
         }
     }
 
@@ -67,7 +67,6 @@ void Train(dnn* net,
         float* test_images, float* test_labels, int test_size,
         int epochs, float learning_rate) {
     float* labels;
-    int offset;
     int epoch_cnt;
     int batch_size;
     int in_dim, out_dim;
@@ -83,7 +82,9 @@ void Train(dnn* net,
     while (epoch_cnt++ < epochs) {
         _time_start();
 
-        offset = 0;
+        int correct = 0;
+        int offset = 0;
+
         while (offset + batch_size <= train_size) {
             layer* l = net->next;
             if (l == NULL) break;
@@ -103,12 +104,35 @@ void Train(dnn* net,
 
             // Add offset for the next batch
             offset += batch_size;
+
+            // Calculate accuracy
+            for (int i=0; i < batch_size; ++i) {
+                int label = -1;
+                int max_idx = -1;
+                float max_val = -1;
+                for (int j=0; j < out_dim; ++j) {
+                    float val = net->edge->out[i*out_dim + j];
+                    if (val > max_val) {
+                        max_idx = j;
+                        max_val = val;
+                    }
+                    if (labels[i*out_dim + j] == 1) {
+                        label = j;
+                    }
+                }
+
+                if (max_idx == label) {
+                    correct++;
+                }
+            }
         }
         _time_end();
 
         printf("epoch %d: %.0f ms (%.0f img/sec)\n",
                 epoch_cnt, _get_time(),
                 (float)offset / _get_time() * 1000);
+
+        printf(" ====> Train Acc.: %.2f\n", ((float)correct/offset) * 100);
 
         // Test if test data is given
         if (test_images != NULL && test_labels != NULL && test_size > 0) {
@@ -164,6 +188,6 @@ void Test(dnn* net, float* test_images, float* test_labels, int test_size) {
         // Add offset for the next batch
         offset += batch_size;
     }
-    printf(" ====> Acc.: %.2f\n", ((float)correct/offset) * 100);
+    printf(" ====> Test Acc.: %.2f\n", ((float)correct/offset) * 100);
 }
 
