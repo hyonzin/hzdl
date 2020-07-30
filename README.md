@@ -14,9 +14,10 @@ make
  - [x] Sigmoid
  - [x] Softmax
  - [x] Read MNIST
+ - [ ] Save and Load model
  - [x] Support Transfer Learning
- - [ ] Support Residual block
- - [ ] Support Batch Normalization
+ - [ ] Residual block
+ - [ ] Batch Normalization
  
 
 required: gcc <br/>optional: openMP
