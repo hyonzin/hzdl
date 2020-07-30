@@ -109,6 +109,8 @@ float* read_mnist_test_labels(char* dir) {
 
 void show_mnist(float* label, float* image, int idx) {
     int i, j;
+    char* pen = " .:-=+*#%@";
+
     printf("label: ");
     for (i=0; i<10; ++i) {
         if (label[idx*10 + i] > 0) {
@@ -119,8 +121,9 @@ void show_mnist(float* label, float* image, int idx) {
 
     for (i=0; i<28; ++i) {
         for (j=0; j<28; ++j) {
-            if (image[(28*28*idx) + i*28+j] > 0.5) printf("#");
-            else printf(" ");
+            int val = (image[(28*28*idx) + i*28+j] * 10);
+            val = fmax(fmin(val, 9), 0);
+            printf("%c", pen[val]);
         }
         printf("\n");
     }

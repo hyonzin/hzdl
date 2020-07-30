@@ -12,6 +12,7 @@
 typedef struct _dnn {
     struct _layer* next;
     struct _layer* edge;
+    int is_training;
 } dnn;
 
 

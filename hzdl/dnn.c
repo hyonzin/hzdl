@@ -7,6 +7,7 @@ void CreateDNN(dnn** net) {
     dnn* new_net = (dnn*) malloc(sizeof(dnn));
     new_net->next = NULL;
     new_net->edge = NULL;
+    new_net->is_training = 0;
     *net = new_net;
 }
 
@@ -82,10 +83,13 @@ void Train(dnn* net,
 //    labels = malloc(batch_size * out_dim * sizeof(float));
     epoch_cnt = 0;
     while (epoch_cnt++ < epochs) {
-        _time_start();
 
         float score = 0;
         int offset = 0;
+
+
+        net->is_training = 1;
+        _time_start();
 
         while (offset + batch_size <= train_size) {
             layer* l = net->next;
@@ -113,7 +117,9 @@ void Train(dnn* net,
                 score += score_function(net, labels);
             }
         }
+
         _time_end();
+        net->is_training = 0;
 
         printf("epoch %d: %.0f ms (%.0f img/sec)\n",
                 epoch_cnt, _get_time(),

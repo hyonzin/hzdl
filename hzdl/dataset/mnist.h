@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 float* read_mnist_train_images();
 float* read_mnist_train_labels();
