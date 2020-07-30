@@ -7,4 +7,5 @@ make
 ```
 
 required: gcc
+
 optional: openMP
