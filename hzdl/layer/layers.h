@@ -26,6 +26,8 @@ typedef struct _layer {
     float* bias;
     float* delta;
 
+    int is_frozen;
+
     struct _layer* prev;
     struct _layer* next;
     struct _dnn* dnn;

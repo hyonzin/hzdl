@@ -22,6 +22,14 @@ typedef struct _dnn {
 
 void CreateDNN(dnn** net);
 void DestroyDNN(dnn** net);
+void DeleteLayer(dnn* net);
+
+void Freeze(dnn* net);
+void Melt(dnn* net);
+
+void Forward(dnn* net);
+void Backward(dnn* net, float* labels);
+void UpdateWeight(dnn* net, float learning_rate);
 
 void Train(dnn* net,
         float* train_images, float* train_labels, int train_size,
@@ -32,8 +40,4 @@ void Train(dnn* net,
 void Test(dnn* net,
         float* test_images, float* test_labels, int test_size,
         float (*score_function)(struct _dnn*, float*));
-
-void Forward(dnn* net);
-void Backward(dnn* net, float* labels);
-void UpdateWeight(dnn* net, float learning_rate);
 

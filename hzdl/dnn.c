@@ -29,7 +29,46 @@ void DestroyDNN(dnn** net) {
     }
 }
 
+void DeleteLayer(dnn* net) {
+    assert(net != NULL);
+
+    layer* prev;
+    layer* l = net->edge;
+
+    if (l != NULL) {
+        prev = l->prev;
+        l->destroy(l);
+
+        prev->next = NULL;
+        net->edge = prev;
+    }
+}
+
+void Freeze(dnn* net) {
+    assert(net != NULL);
+
+    layer* l = net->next;
+
+    while (l && l->type != layer_type_input) {
+        l->is_frozen = 1;
+        l = l->next;
+    }
+}
+
+void Melt(dnn* net) {
+    assert(net != NULL);
+
+    layer* l = net->next;
+
+    while (l && l->type != layer_type_input) {
+        l->is_frozen = 0;
+        l = l->next;
+    }
+}
+
 void Forward(dnn* net) {
+    assert(net != NULL);
+
     layer* l = net->next;
     if (l == NULL) return;
     l = l->next;
@@ -42,8 +81,9 @@ void Forward(dnn* net) {
 }
 
 void Backward(dnn* net, float* labels) {
+    assert(net != NULL);
+
     layer* l = net->edge;
-    if (l == NULL) return;
 
     while (l && l->type != layer_type_input) {
         if (l->backward != NULL)
@@ -53,8 +93,9 @@ void Backward(dnn* net, float* labels) {
 }
 
 void UpdateWeight(dnn* net, float learning_rate) {
+    assert(net != NULL);
+
     layer* l = net->edge;
-    if (l == NULL) return;
 
     while (l && l->type != layer_type_input) {
         if (l->update_weight != NULL)
@@ -62,7 +103,6 @@ void UpdateWeight(dnn* net, float learning_rate) {
         l = l->prev;
     }
 }
-
 
 void Train(dnn* net,
         float* train_images, float* train_labels, int train_size,

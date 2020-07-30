@@ -26,6 +26,8 @@ void Dense(dnn* net, int dim, activation act) {
     
     l->delta = (float*) malloc((l->n * dim) * sizeof(float));
 
+    l->is_frozen = 0;
+
     // Set random values
     {
         int i;
@@ -84,7 +86,9 @@ void DenseForward(layer* l) {
 void DenseBackward(layer* l, float* labels) {
     int is_last_dense_layer = 0;
     int dim;
-    
+
+    if (l->is_frozen) return;
+
     if (l->next == NULL) {
         is_last_dense_layer = 1;
     }
