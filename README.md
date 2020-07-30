@@ -6,6 +6,17 @@ make
 ./build/test_[...].out
 ```
 
-required: gcc
+ - [x] Dense layer: forward
+ - [x] Dense layer: backward
+ - [ ] Conv. layer: forward
+ - [ ] Conv. layer: backward
+ - [x] ReLU
+ - [x] Sigmoid
+ - [x] Softmax
+ - [x] Read MNIST
+ - [x] Support Transfer Learning
+ - [ ] Support Residual block
+ - [ ] Support Batch Normalization
+ 
 
-optional: openMP
+required: gcc <br/>optional: openMP
