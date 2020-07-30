@@ -4,45 +4,51 @@
 
 #define MNIST_DIR "data/mnist"
 
-#define ActFunc None
-
-float LossAndShow(dnn* net, float* labels) {
-    if (!net->is_training) {
-        float tr[10] = {0, 1,};
-        float te[10] = {1, 0,};
-        show_mnist(tr, net->next->out, 0);
-        show_mnist(te, net->edge->out, 0);
-    }
-    return Loss(net, labels);
-}
-
+/* MNIST Transfer Learning
+ * (AutoEncoder & Classifier) */
 
 int test_mnist(int argc, char* argv[]) {
     float* train_images = read_mnist_train_images(MNIST_DIR);
+    float* train_labels = read_mnist_train_labels(MNIST_DIR);
     float* test_images = read_mnist_test_images(MNIST_DIR);
+    float* test_labels = read_mnist_test_labels(MNIST_DIR);
 
     int train_size = 60000, test_size = 10000;
-    int batch_size = 32, epochs = 30;
-    float learning_rate = 0.003;
+    int batch_size = 32;
 
     dnn* net;
     CreateDNN(&net);
 
     Input(net, batch_size, 1, 28, 28);
-    Dense(net, 128, ActFunc);
-    Dense(net, 64, ActFunc);
-    Dense(net, 128, ActFunc);
-    Dense(net, 28*28, ActFunc);
-   
+    Dense(net, 128, None);
+    Dense(net, 64, None);
+    Dense(net, 128, None);
+    Dense(net, 28*28, None);
+
+    // AutoEncoder unsupervised learning
     Train(net, train_images, train_images, train_size,
             test_images, test_images, test_size,
-            epochs, learning_rate,
-            LossAndShow);
+            50, 0.003,
+            Loss);
+
+    DeleteLayer(net);
+    DeleteLayer(net);
+
+    Freeze(net);
+    Dense(net, 10, Softmax);
+
+    // Classifier supervised fine-tuning
+    Train(net, train_images, train_labels, train_size,
+            test_images, test_labels, test_size,
+            15, 0.01,
+            Accuracy);
 
     DestroyDNN(&net);
 
     free(train_images);
+    free(train_labels);
     free(test_images);
+    free(test_labels);
 
     return 0;
 }
