@@ -10,6 +10,12 @@ float* read_mnist_train_images(char* dir) {
     
     sprintf(path, "%s/train-images-idx3-ubyte", dir);
     fp = fopen(path, "r");
+
+    if (!fp) {
+        printf("ERR: No dataset.\n     Download mnist at %s\n", path);
+        exit(-1);
+    }
+
     fseek(fp, 16, SEEK_SET);
     res = fread(cbuf, 1, 60000 * 28 * 28, fp);
     if (res <= 0) {
@@ -34,6 +40,12 @@ float* read_mnist_train_labels(char* dir) {
     
     sprintf(path, "%s/train-labels-idx1-ubyte", dir);
     fp = fopen(path, "r");
+
+    if (!fp) {
+        printf("ERR: No dataset.\n     Download mnist at %s\n", path);
+        exit(-1);
+    }
+
     fseek(fp, 8, SEEK_SET);
     res = fread(cbuf, 1, 60000, fp);
     if (res <= 0) {
@@ -63,6 +75,12 @@ float* read_mnist_test_images(char* dir) {
     
     sprintf(path, "%s/t10k-images-idx3-ubyte", dir);
     fp = fopen(path, "r");
+
+    if (!fp) {
+        printf("ERR: No dataset.\n     Download mnist at %s\n", path);
+        exit(-1);
+    }
+
     fseek(fp, 16, SEEK_SET);
     res = fread(cbuf, 1, 10000 * 28 * 28, fp);
     if (res <= 0) {
@@ -87,6 +105,12 @@ float* read_mnist_test_labels(char* dir) {
     
     sprintf(path, "%s/t10k-labels-idx1-ubyte", dir);
     fp = fopen(path, "r");
+
+    if (!fp) {
+        printf("ERR: No dataset.\n     Download mnist at %s\n", path);
+        exit(-1);
+    }
+
     fseek(fp, 8, SEEK_SET);
     res = fread(cbuf, 1, 10000, fp);
     if (res <= 0) {
