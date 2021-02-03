@@ -3,6 +3,11 @@ whatsup🍔
 
 ```bash
 make
+
+cd data/[...]/
+download_[...].sh
+
+cd -
 ./build/test_[...].out
 ```
 
