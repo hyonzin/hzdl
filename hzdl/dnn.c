@@ -29,7 +29,7 @@ void DestroyDNN(dnn** net) {
     }
 }
 
-void DeleteLayer(dnn* net) {
+void DeleteLastLayer(dnn* net) {
     assert(net != NULL);
 
     layer* prev;

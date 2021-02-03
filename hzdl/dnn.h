@@ -22,7 +22,7 @@ typedef struct _dnn {
 
 void CreateDNN(dnn** net);
 void DestroyDNN(dnn** net);
-void DeleteLayer(dnn* net);
+void DeleteLastLayer(dnn* net);
 
 void Freeze(dnn* net);
 void Melt(dnn* net);

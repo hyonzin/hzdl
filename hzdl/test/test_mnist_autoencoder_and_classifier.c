@@ -31,8 +31,8 @@ int test_mnist(int argc, char* argv[]) {
             50, 0.003,
             Loss);
 
-    DeleteLayer(net);
-    DeleteLayer(net);
+    DeleteLastLayer(net);
+    DeleteLastLayer(net);
 
     Freeze(net);
     Dense(net, 10, Softmax);
