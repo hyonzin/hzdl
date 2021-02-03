@@ -1,9 +1,19 @@
-#include "hzdl/score.h"
+#include "hzdl/metric.h"
 
+
+void GetMetricName(char* name, float (*metric_function)(struct _dnn*, float*)) {
+    if (metric_function == Accuracy) {
+        sprintf(name, "Accuracy");
+    } else if (metric_function == Loss) {
+        sprintf(name, "Loss");
+    } else {
+        sprintf(name, "Unknown");
+    }
+}
 
 float Accuracy(dnn* net, float* labels) {
     int out_dim = _get_num_element(net->edge);
-    float score = 0;
+    float metric = 0;
 
     for (int i=0; i < net->next->n; ++i) {
         int label = -1;
@@ -21,10 +31,10 @@ float Accuracy(dnn* net, float* labels) {
         }
 
         if (max_idx == label) {
-            score+=1;
+            metric+=1;
         }
     }
-    return score;
+    return metric;
 }
 
 float Loss(dnn* net, float* labels) {

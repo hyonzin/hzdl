@@ -107,7 +107,7 @@ void UpdateWeight(dnn* net, float learning_rate) {
 void Train(dnn* net,
         float* train_images, float* train_labels, int train_size,
         float* test_images, float* test_labels, int test_size,
-        int epochs, float learning_rate, float (*score_function)(struct _dnn*, float*)) {
+        int epochs, float learning_rate, float (*metric_function)(struct _dnn*, float*)) {
     float* labels;
     int epoch_cnt;
     int batch_size;
@@ -124,7 +124,7 @@ void Train(dnn* net,
     epoch_cnt = 0;
     while (epoch_cnt++ < epochs) {
 
-        float score = 0;
+        float metric = 0;
         int offset = 0;
 
 
@@ -152,9 +152,9 @@ void Train(dnn* net,
             // Add offset for the next batch
             offset += batch_size;
 
-            // Calculate score
-            if (score_function != NULL) {
-                score += score_function(net, labels);
+            // Calculate metric
+            if (metric_function != NULL) {
+                metric += metric_function(net, labels);
             }
         }
 
@@ -165,29 +165,33 @@ void Train(dnn* net,
                 epoch_cnt, _get_time(),
                 (float)offset / _get_time() * 1000);
 
-        if (score_function != NULL) {
-            printf(" ====> Train Acc. or Loss: %.2f\n", (score/offset));
+        if (metric_function != NULL) {
+            char metric_name[32];
+            GetMetricName(metric_name, metric_function);
+
+            printf(" ====> Train %s: %.2f\n", metric_name, ((float)metric/offset));
         }
 
         // Test if test data is given
-        if (score_function != NULL && test_images != NULL && test_labels != NULL && test_size > 0) {
-            Test(net, test_images, test_labels, test_size, score_function);
+        if (metric_function != NULL && test_images != NULL && test_labels != NULL && test_size > 0) {
+            Test(net, test_images, test_labels, test_size, metric_function);
         }
     }
 
 //    free(labels);
 }
 
-void Test(dnn* net, float* test_images, float* test_labels, int test_size, float (*score_function)(struct _dnn*, float*)) {
-    float score = 0;
+void Test(dnn* net, float* test_images, float* test_labels, int test_size, float (*metric_function)(struct _dnn*, float*)) {
+    float metric = 0;
     int offset = 0;
     int batch_size;
     int in_dim, out_dim;
     float* labels;
+    char metric_name[32];
     
     assert(net != NULL);
     assert(net->next != NULL);
-    assert(score_function != NULL);
+    assert(metric_function != NULL);
 
     batch_size = net->next->n;
     in_dim = _get_num_element(net->next);
@@ -205,13 +209,14 @@ void Test(dnn* net, float* test_images, float* test_labels, int test_size, float
         // Forward
         Forward(net);
 
-        // Calculate score
-        score += score_function(net, labels);
+        // Calculate metric
+        metric += metric_function(net, labels);
 
         // Add offset for the next batch
         offset += batch_size;
     }
 
-    printf(" ====> Test Acc. or loss: %.2f\n", ((float)score/offset));
+    GetMetricName(metric_name, metric_function);
+    printf(" ====> Test %s: %.2f\n", metric_name, ((float)metric/offset));
 }
 
