@@ -22,7 +22,7 @@ int test_mnist(int argc, char* argv[]) {
     Input(net, batch_size, 1, 28, 28);
     Dense(net, 500, ReLU);
     Dense(net, 10, Softmax);
-   
+ 
     Train(net, train_images, train_labels, train_size,
             test_images, test_labels, test_size,
             epochs, batch_size, learning_rate,

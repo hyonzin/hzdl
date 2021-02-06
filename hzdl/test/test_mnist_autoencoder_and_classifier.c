@@ -14,23 +14,20 @@ int test_mnist(int argc, char* argv[]) {
     float* test_labels = read_mnist_test_labels(MNIST_DIR);
 
     int train_size = 60000, test_size = 10000;
-    int batch_buffer_size = 128;
-    int batch_size;
+    int batch_size = 64;
     float epochs, lr;
 
     dnn* net;
     CreateDNN(&net);
 
-    Input(net, batch_buffer_size, 1, 28, 28);
+    Input(net, batch_size, 1, 28, 28);
     Dense(net, 128, None);
     Dense(net, 64, None);
     Dense(net, 128, None);
     Dense(net, 28*28, None);
 
     // AutoEncoder unsupervised learning
-    epochs = 3;
-    batch_size = 64;
-    batch_size = 16;
+    epochs = 30;
     lr = 0.0001;
     Train(net, train_images, train_images, train_size,
             test_images, test_images, test_size,
@@ -45,8 +42,7 @@ int test_mnist(int argc, char* argv[]) {
 
     // Classifier supervised fine-tuning
     epochs = 15;
-    batch_size = 32;
-    lr = 0.001;
+    lr = 0.01;
     Train(net, train_images, train_labels, train_size,
             test_images, test_labels, test_size,
             epochs, batch_size, lr,
