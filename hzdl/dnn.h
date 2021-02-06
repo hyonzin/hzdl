@@ -18,6 +18,7 @@ typedef struct _dnn {
 #include "hzdl/util.h"
 #include "hzdl/layer/layers.h"
 #include "hzdl/metric.h"
+#include "hzdl/file.h"
 
 void CreateDNN(dnn** net);
 void DestroyDNN(dnn** net);

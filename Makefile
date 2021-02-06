@@ -1,6 +1,5 @@
 CC := gcc
 CFLAGS := -I$(shell pwd) -O3 -lm -fPIC -fopenmp
-#CFLAGS := -I$(shell pwd) -O3 -lm -fPIC
 
 SRC := hzdl
 BUILD := build

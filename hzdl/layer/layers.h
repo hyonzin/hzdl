@@ -3,8 +3,8 @@
 #include "hzdl/layer/activation.h"
 
 enum layer_type {
-    layer_type_input,
-    layer_type_dense
+    layer_type_input = 1,
+    layer_type_dense = 2
 };
 
 typedef struct _layer {
@@ -26,6 +26,9 @@ typedef struct _layer {
     float* weight;
     float* bias;
     float* delta;
+
+    int weight_size;
+    int bias_size;
 
     int is_frozen;
 

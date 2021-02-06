@@ -21,6 +21,9 @@ void Input(dnn* net, int n, int c, int h, int w) {
     l->delta = NULL;
     l->out = (float*) malloc(n * c * h * w * sizeof(float));
 
+    l->weight_size = 0;
+    l->bias_size = 0;
+
     l->next = NULL;
     l->prev = NULL;
     net->edge = net->next = l;
