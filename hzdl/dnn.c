@@ -65,6 +65,24 @@ void Melt(dnn* net) {
     }
 }
 
+void UpdateBatchSize(dnn* net, int batch_size) {
+    assert(net != NULL);
+   
+    layer* l = net->next;
+    if (l == NULL) return;
+
+    if (batch_size > l->buffer_size) {
+        warn("batch size(%d) must be same or less than buffer size(%d)\n",
+                batch_size, l->buffer_size);
+        batch_size = l->buffer_size;
+    }
+
+    while (l) {
+        l->n = batch_size;
+        l = l->next;
+    }
+}
+
 void Forward(dnn* net) {
     assert(net != NULL);
 
@@ -106,26 +124,25 @@ void UpdateWeight(dnn* net, float learning_rate) {
 void Train(dnn* net,
         float* train_images, float* train_labels, int train_size,
         float* test_images, float* test_labels, int test_size,
-        int epochs, float learning_rate, float (*metric_function)(struct _dnn*, float*)) {
+        int epochs, int batch_size, float learning_rate,
+        float (*metric_function)(struct _dnn*, float*)) {
     float* labels;
     int epoch_cnt;
-    int batch_size;
     int in_dim, out_dim;
     
     assert(net != NULL);
     assert(net->next != NULL);
 
-    batch_size = net->next->n;
+    UpdateBatchSize(net, batch_size);
+
     in_dim = _get_num_element(net->next);
     out_dim = _get_num_element(net->edge);
 
-//    labels = malloc(batch_size * out_dim * sizeof(float));
     epoch_cnt = 0;
     while (epoch_cnt++ < epochs) {
 
         float metric = 0;
         int offset = 0;
-
 
         net->is_training = 1;
         _time_start();
@@ -135,7 +152,8 @@ void Train(dnn* net,
             if (l == NULL) break;
 
             // Feed input data
-            memcpy(l->out, train_images + offset * in_dim, batch_size * in_dim * sizeof(float));
+            memcpy(l->out, train_images + offset * in_dim,
+                    batch_size * in_dim * sizeof(float));
 
             // Set label
             labels = train_labels + offset * out_dim;
@@ -167,20 +185,23 @@ void Train(dnn* net,
             char metric_name[32];
             GetMetricName(metric_name, metric_function);
 
-            printf(" ====> Train %s: %.2f\n", metric_name, ((float)metric/offset));
+            printf(" ====> Train %s: %.2f\n",
+                    metric_name, ((float)metric/offset));
         }
 
         // Test if test data is given
-        if (metric_function != NULL && test_images != NULL && test_labels != NULL && test_size > 0) {
-            Test(net, test_images, test_labels, test_size, metric_function);
+        if (metric_function != NULL && test_images != NULL
+                && test_labels != NULL && test_size > 0) {
+            Test(net, test_images, test_labels, test_size,
+                    batch_size, metric_function);
         }
     }
 }
 
-void Test(dnn* net, float* test_images, float* test_labels, int test_size, float (*metric_function)(struct _dnn*, float*)) {
+void Test(dnn* net, float* test_images, float* test_labels, int test_size,
+        int batch_size, float (*metric_function)(struct _dnn*, float*)) {
     float metric = 0;
     int offset = 0;
-    int batch_size;
     int in_dim, out_dim;
     float* labels;
     char metric_name[32];
@@ -189,7 +210,6 @@ void Test(dnn* net, float* test_images, float* test_labels, int test_size, float
     assert(net->next != NULL);
     assert(metric_function != NULL);
 
-    batch_size = net->next->n;
     in_dim = _get_num_element(net->next);
     out_dim = _get_num_element(net->edge);
 
@@ -197,7 +217,8 @@ void Test(dnn* net, float* test_images, float* test_labels, int test_size, float
         layer* l = net->next;
 
         // Feed input data
-        memcpy(l->out, test_images + offset * in_dim, batch_size * in_dim * sizeof(float));
+        memcpy(l->out, test_images + offset * in_dim,
+                batch_size * in_dim * sizeof(float));
         
         // Set label
         labels = test_labels + offset * out_dim;

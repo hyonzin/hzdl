@@ -8,6 +8,7 @@ enum layer_type {
 };
 
 typedef struct _layer {
+    int buffer_size;
     int n;
     int c;
     int h;

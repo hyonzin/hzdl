@@ -36,7 +36,7 @@ int test_mnist(int argc, char* argv[]) {
    
     Train(net, train_images, train_images, train_size,
             test_images, test_images, test_size,
-            epochs, learning_rate,
+            epochs, batch_size, learning_rate,
             // LossAndShow);
             Loss);
 

@@ -3,7 +3,8 @@
 void Dense(dnn* net, int dim, activation act) {
     layer* l = (layer*) malloc(sizeof(layer));
     l->dnn = net;
-    l->n = net->edge->n;
+    l->buffer_size = net->edge->n;
+    l->n = l->buffer_size;
     l->c = 1;
     l->h = 1;
     l->w = dim;

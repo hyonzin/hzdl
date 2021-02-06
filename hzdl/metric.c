@@ -1,7 +1,7 @@
 #include "hzdl/metric.h"
 
-
-void GetMetricName(char* name, float (*metric_function)(struct _dnn*, float*)) {
+void GetMetricName(char* name,
+        float (*metric_function)(struct _dnn*, float*)) {
     if (metric_function == Accuracy) {
         sprintf(name, "Accuracy");
     } else if (metric_function == Loss) {
@@ -44,7 +44,8 @@ float Loss(dnn* net, float* labels) {
 
     for (int i=0; i < batch_size; ++i) {
         for (int j=0; j < out_dim; ++j) {
-            float val = net->edge->out[i*out_dim + j] - labels[i*out_dim + j];
+            float val = net->edge->out[i*out_dim + j]
+                - labels[i*out_dim + j];
             loss += (val * val);
         }
     }

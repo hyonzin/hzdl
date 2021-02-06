@@ -3,6 +3,7 @@
 void Input(dnn* net, int n, int c, int h, int w) {
     layer* l = (layer*) malloc(sizeof(layer));
     l->dnn = net;
+    l->buffer_size = n;
     l->n = n;
     l->c = c;
     l->h = h;
