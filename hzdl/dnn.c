@@ -177,7 +177,7 @@ void Train(dnn* net,
         _time_end();
         net->is_training = 0;
 
-        printf("epoch %d: %.0f ms (%.0f img/sec)\n",
+        printf("epoch %d: %.0f ms (%.0f sample/sec)\n",
                 epoch_cnt, _get_time(),
                 (float)offset / _get_time() * 1000);
 
