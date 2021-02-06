@@ -5,7 +5,7 @@ whatsup🍔
 make
 
 cd data/[...]/
-download_[...].sh
+./download_[...].sh
 
 cd -
 ./build/test_[...].out
