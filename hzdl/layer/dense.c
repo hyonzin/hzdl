@@ -33,10 +33,10 @@ void Dense(dnn* net, int dim, activation act) {
     {
         int i;
         srand(time(NULL));
-        for (i=0; i<l->n * _get_num_element(net->edge) * dim; ++i) {
+        for (i=0; i< _get_num_element(net->edge) * dim; ++i) {
             l->weight[i] = _random_float();
         }
-        for (i=0; i<l->n * dim; ++i) {
+        for (i=0; i< dim; ++i) {
             l->bias[i] = _random_float();
         }
     }
