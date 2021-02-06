@@ -14,7 +14,7 @@ int test_mnist(int argc, char* argv[]) {
     float* test_labels = read_mnist_test_labels(MNIST_DIR);
 
     int train_size = 60000, test_size = 10000;
-    int batch_size = 32;
+    int batch_size = 64;
 
     dnn* net;
     CreateDNN(&net);
@@ -28,7 +28,7 @@ int test_mnist(int argc, char* argv[]) {
     // AutoEncoder unsupervised learning
     Train(net, train_images, train_images, train_size,
             test_images, test_images, test_size,
-            50, 0.003,
+            50, 0.0001,
             Loss);
 
     DeleteLastLayer(net);

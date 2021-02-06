@@ -22,8 +22,8 @@ int test_mnist(int argc, char* argv[]) {
     float* test_images = read_mnist_test_images(MNIST_DIR);
 
     int train_size = 60000, test_size = 10000;
-    int batch_size = 32, epochs = 30;
-    float learning_rate = 0.003;
+    int batch_size = 64, epochs = 30;
+    float learning_rate = 0.0001;
 
     dnn* net;
     CreateDNN(&net);
@@ -37,7 +37,8 @@ int test_mnist(int argc, char* argv[]) {
     Train(net, train_images, train_images, train_size,
             test_images, test_images, test_size,
             epochs, learning_rate,
-            LossAndShow);
+            // LossAndShow);
+            Loss);
 
     DestroyDNN(&net);
 
