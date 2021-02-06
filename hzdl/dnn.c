@@ -139,7 +139,6 @@ void Train(dnn* net,
             memcpy(l->out, train_images + offset * in_dim, batch_size * in_dim * sizeof(float));
 
             // Set label
-//            memcpy(labels, train_labels + offset * out_dim, batch_size * out_dim * sizeof(float));
             labels = train_labels + offset * out_dim;
 
             // Forward
@@ -177,8 +176,6 @@ void Train(dnn* net,
             Test(net, test_images, test_labels, test_size, metric_function);
         }
     }
-
-//    free(labels);
 }
 
 void Test(dnn* net, float* test_images, float* test_labels, int test_size, float (*metric_function)(struct _dnn*, float*)) {

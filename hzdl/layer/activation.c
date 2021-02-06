@@ -15,9 +15,6 @@ float SigmoidForward(struct _layer* l, int batch_idx, float val) {
 }
 
 float SigmoidBackward(struct _layer* l, int batch_idx, float val) {
-//    float res = 1 / (1 + exp(-val));
-//    res = res * (1 - res);
-//    return res;
     return val * (1 - val);
 }
 
