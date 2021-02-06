@@ -140,7 +140,6 @@ void Train(dnn* net,
 
     epoch_cnt = 0;
     while (epoch_cnt++ < epochs) {
-
         float metric = 0;
         int offset = 0;
 

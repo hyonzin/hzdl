@@ -21,8 +21,8 @@ void Dense(dnn* net, int dim, activation act) {
     l->in = net->edge->out;
     // Malloc for weight and output
     l->weight = (float*) malloc(
-        (l->n * _get_num_element(net->edge) * dim) * sizeof(float));
-    l->bias = (float*) malloc((l->n * dim) * sizeof(float));
+        (_get_num_element(net->edge) * dim) * sizeof(float));
+    l->bias = (float*) malloc(dim * sizeof(float));
     l->out = (float*) malloc((l->n * dim) * sizeof(float));
     
     l->delta = (float*) malloc((l->n * dim) * sizeof(float));
