@@ -27,14 +27,21 @@ int test_simple(int argc, char* argv[]) {
 
     SaveDNN(net, "test_net");
 
+    printf("test_net model saved.\n");
+
     // DNN to load
     dnn* loaded_net;
     CreateDNN(&loaded_net);
     Input(loaded_net, batch_size, 1, 1, 4);
     Dense(loaded_net, 2, Softmax);
 
+    printf("before lading...\n");
+    Test(loaded_net, test_images, test_labels, test_size,
+            batch_size, Accuracy);
+
     LoadDNN(&loaded_net, "test_net");
 
+    printf("after loading...\n");
     Test(loaded_net, test_images, test_labels, test_size,
             batch_size, Accuracy);
 
