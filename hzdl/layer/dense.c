@@ -33,7 +33,6 @@ void Dense(dnn* net, int dim, activation act) {
     // Set random values
     {
         int i;
-        srand(time(NULL));
         for (i=0; i< _get_num_element(net->edge) * dim; ++i) {
             l->weight[i] = _random_float();
         }
