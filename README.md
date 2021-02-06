@@ -19,7 +19,7 @@ cd -
  - [x] Sigmoid
  - [x] Softmax
  - [x] Read MNIST
- - [ ] Save and Load model
+ - [X] Save and Load model
  - [x] Support Transfer Learning
  - [ ] Residual block
  - [ ] Batch Normalization
