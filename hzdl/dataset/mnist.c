@@ -153,35 +153,3 @@ void show_mnist(float* label, float* image, int idx) {
     }
     printf("\n");
 }
-
-//FIXME
-void feed_mnist_images(float* dst, unsigned char* src, int offset, int num) {
-    int i, j, k;
-    int m = 0;
-
-    src = &src[(offset * 28 * 28)];
-    for (i=0; i<num; ++i) {
-        for (j=0; j<28; ++j) {
-            for (k=0; k<28; ++k) {
-                dst[m] = (float)src[m];
-                ++m;
-            }
-        }
-    }
-}
-
-//FIXME
-void feed_mnist_labels(float* dst, unsigned char* src, int offset, int num) {
-    int i, j;
-    int m = 0, n = 0;
-
-    src = &src[offset];
-    for (i=0; i<num; ++i) {
-        for (j=0; j<10; ++j) {
-            if (j == src[i])
-                dst[i*10 + j] = 1;
-            else
-                dst[i*10 + j] = 0;
-        }
-    }
-}
