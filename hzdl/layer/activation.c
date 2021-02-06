@@ -1,6 +1,5 @@
 #include "hzdl/layer/activation.h"
 
-
 float NoneForward(struct _layer* l, int batch_idx, float val) {
     return val;
 }

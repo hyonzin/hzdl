@@ -6,15 +6,14 @@
 #include <math.h>
 #include <time.h>
 #include <assert.h>
+#include <err.h>
 #include <omp.h>
-
 
 typedef struct _dnn {
     struct _layer* next;
     struct _layer* edge;
     int is_training;
 } dnn;
-
 
 #include "hzdl/util.h"
 #include "hzdl/layer/layers.h"

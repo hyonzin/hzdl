@@ -1,6 +1,5 @@
 #include "hzdl/dnn.h"
 
-
 void CreateDNN(dnn** net) {
     if (net == NULL) return;
 

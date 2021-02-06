@@ -1,6 +1,5 @@
 #include "hzdl/dataset/mnist.h"
 
-
 float* read_mnist_train_images(char* dir) {
     int i, res;
     float* buf = (float*) malloc(60000 * 28 * 28 * sizeof(float));

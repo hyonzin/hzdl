@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "hzdl/dnn.h"
 
-
 int test_simple(int argc, char* argv[]) {
     float train_images[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
     float train_labels[8] = {1, 0, 1, 0, 0, 1, 0, 1};

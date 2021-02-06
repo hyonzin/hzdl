@@ -4,7 +4,6 @@
 
 #define MNIST_DIR "data/mnist"
 
-
 int test_mnist(int argc, char* argv[]) {
     float* train_images = read_mnist_train_images(MNIST_DIR);
     float* train_labels = read_mnist_train_labels(MNIST_DIR);
