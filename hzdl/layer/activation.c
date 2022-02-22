@@ -45,7 +45,7 @@ float SoftmaxForward(struct _layer* l, int batch_idx, float val) {
     }
 
     if (sum == 0) return 0;
-    
+
     // Calculate ratio
     return exp(val) / sum;
 }
@@ -62,8 +62,17 @@ float SoftmaxBackward(struct _layer* l, int batch_idx, float val) {
     }
 
     if (val == 0 || sum == 0) return 0;
-    
+
     // Calculate ratio
     return (exp(val) * (sum - exp(val))) / (sum * sum);
 }
 
+
+float TanhForward(struct _layer* l, int batch_idx, float val) {
+    return 2 * (1 / (1 + exp(-2 * val))) - 1;  // 2 * sigmoid(2x) - 1
+}
+
+float TanhBackward(struct _layer* l, int batch_idx, float val) {
+    return (1 - (2 * (1 / (1 + exp(-2 * val))) - 1)) *
+           (1 + (2 * (1 / (1 + exp(-2 * val))) - 1));  // (1 - tanh(x)) * (1 + tanh(x))
+}

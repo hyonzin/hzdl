@@ -26,4 +26,8 @@ float SoftmaxForward(struct _layer* l, int batch_idx, float val);
 float SoftmaxBackward(struct _layer* l, int batch_idx, float val);
 static activation Softmax = { SoftmaxForward, SoftmaxBackward};
 
+float TanhForward(struct _layer* l, int batch_idx, float val);
+float TanhBackward(struct _layer* l, int batch_idx, float val);
+static activation Tanh = { TanhForward, TanhBackward};
+
 #include "hzdl/layer/layers.h"
