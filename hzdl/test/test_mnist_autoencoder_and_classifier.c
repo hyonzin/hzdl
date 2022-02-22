@@ -41,7 +41,7 @@ int test_mnist(int argc, char* argv[]) {
     Dense(net, 10, Softmax);
 
     // Classifier supervised fine-tuning
-    epochs = 20;
+    epochs = 10;
     lr = 0.0005;
     Train(net, train_images, train_labels, train_size,
             test_images, test_labels, test_size,
@@ -61,4 +61,3 @@ int test_mnist(int argc, char* argv[]) {
 int main(int argc, char* argv[]) {
     return test_mnist(argc, argv);
 }
-
